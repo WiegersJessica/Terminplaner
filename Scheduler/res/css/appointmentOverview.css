@@ -1,0 +1,66 @@
+.appointment-overview-header {
+    text-align: center;
+}
+
+.appointment-overview-table {
+    margin-top: 40px;
+}
+
+.appointment-table-header, .appointment-table-body {
+    text-align: center;
+}
+
+.appointment-table-header {
+    height: 50px;
+    /*background-color: #f3fafc;*/
+    background-color: #F8F8F8;
+}
+
+.appointment-table-body {
+    height: 40px;
+}
+
+#appointment-date {
+    background-color: #F8F8F8;
+}
+
+th {
+    height: 34px;
+    background-color: #f3fafc;
+    vertical-align: middle !important;
+}
+
+caption {
+    text-align: center;
+}
+
+.comment-column:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.comment-textarea {
+    float: left;
+    width: 86%;
+    padding: 5px;
+    opacity: 0.8;
+    font-size: 12px;
+}
+
+.add-comment-icon {
+    float: right;
+    color: grey;
+    margin-top: 6%;
+    margin-right: 3%;
+}
+
+.delete-appointment-icon {
+    color: grey;
+    margin: auto;
+    margin-top: 6%;
+}
+
+.add-comment-icon:hover, .delete-appointment-icon:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}

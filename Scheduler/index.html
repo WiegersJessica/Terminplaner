@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> <!--Optimieren für mobile Geräte-->
+        <title>Scheduler</title>
+        
+        <!--Firebase-->
+        <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+        
+        <!--jQuery-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        
+        <!--Bootstrap-->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+        
+        <!--CSS-Dateien-->
+        <link rel="stylesheet" href="res/css/scheduler.css">
+        <link rel="stylesheet" href="res/css/fullcalendar.min.css">
+        <link rel="stylesheet" href="res/css/appointmentCreation.css">
+        <link rel="stylesheet" href="res/css/appointmentOverview.css">
+        <link rel="stylesheet" href="res/css/scrolling.css">
+        <link rel="stylesheet" href="res/css/main.css">
+        
+        <link href='http://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
+    </head>
+    
+    <body>
+        <!--HEADER-->
+        <nav class="navbar navbar-default">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="creation-appointment-button active"><a href="">Terminerstellung</a></li>
+                    <li class="overview-appointment-button"><a href="#Uebersicht">Terminübersicht</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <div class="row">
+            <div class="appointment-creation-box">
+                <div class="col-md-4 appointment-creation-container form-style">
+                    <form class="appointment-creation-form form-inline">
+
+                        <div class="section">
+                            <div class="section-header"><span>1</span>Sprechstundengrund und Dauer</div>
+                            <div class="inner-wrap">
+                                <div class="col-md-6 form-group topic-container">
+                                    <label for="topic">Sprechstundengrund</label>
+                                    <input type="text" list="topics" id="topic-list" placeholder="Thema" style="height: 34px;" > <!--Auswahlliste-->
+                                        <datalist id="topics">
+                                            <!--<option class="topic-option" id="option-one" value="Thema eins" duration="10" />
+                                            <option class="topic-option" id="option-two" value="Thema zwei" duration="5" />
+                                            <option class="topic-option" id="option-three" value="Thema drei" duration="15" />-->
+                                        </datalist>
+                                    </input>
+                                </div>
+                                <div class="col-md-6 form-group duration-container">
+                                    <label for="duration">Dauer</label>
+                                    <input type="text" class="form-control" id="duration" placeholder="Dauer" >
+                                </div>   
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-header"><span>2</span>Datum und Zeitspanne</div>
+                            <div class="inner-wrap">
+                                <div class="col-md-6 form-group date-container">
+                                    <label for="date">Datum</label>
+                                    <input type="date" class="form-control" id="date" placeholder="Datum" >
+                                </div>
+                                <div class="col-md-6 form-group timerange-container">
+                                  <label for="period">Zeitspanne</label>
+                                  <input type="text" class="form-control" id="period" placeholder="Spanne" >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-header"><span>3</span>Freie Termine</div>
+                            <div class="inner-wrap">
+                                <div class="form-group overview-container">
+                                    <label for="date" id="overview-label">Stundenübersicht...Kreisdarstellung</label>
+                                    <!-- Hier Kreis -->
+                                </div>
+                                <!--<div class="col-md-6 form-group appointments-container">
+                                    <label for="possible-times">Mögliche Termine</label>
+                                    <div class="possible-appointment-container">
+                                        <input type="time" style="width:45%" class="form-control possible-time" placeholder="Start" >
+                                        <input type="time" style="width:45%" class="form-control possible-time" placeholder="Ende" >
+                                    </div>
+                                    <div class="possible-appointment-container">
+                                        <input type="time" style="width:45%" class="form-control possible-time" placeholder="Start" >
+                                        <input type="time" style="width:45%" class="form-control possible-time" placeholder="Ende" >
+                                    </div>
+                                </div>-->
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-header"><span>4</span>Name und E-Mail</div>
+                            <div class="inner-wrap">
+                                <div class="col-md-6 form-group name-container">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name" placeholder="Name" >
+                                </div>
+
+                                <div class="col-md-6 form-group prename-container">
+                                    <label for="prename">Vorname</label>
+                                    <input type="text" class="form-control" id="prename" placeholder="Vorname" >
+                                </div>  
+
+                                <div class="col-md-6 form-group email-container">
+                                    <label for="input_email">Email</label>
+                                    <input type="email" class="form-control" id="email" placeholder="E-Mail" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-header"><span>5</span>Kein freier Termin verfügbar?</div>
+                            <div class="inner-wrap">
+                                <div class="form-group name-container">
+                                    <label for="name">Mach das kenntlich und sende eine offene Anfrage.</label>
+                                    <input type="button" id="request-button" value="Anfrage senden" /> <!--submit-->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="button-section">
+                            <input type="submit" id="appointment-button" value="Termin eintragen" /> <!--submit-->
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-md-8 calendar-container">
+             <div id="calendar"></div>
+            </div>   
+            </div>
+        </div>
+    
+        <div class="appointment-overview-box">
+            <h2 class="appointment-overview-header">Sprechstunden-Übersicht</h2>
+            <!--<span class="glyphicon glyphicon-search" aria-hidden="true"></span>-->
+            <table class="appointment-overview-table" align="center" border="1px" width="80%" height="25%" cellspacing="1" cellpadding="2">
+                <caption align="bottom">Sprechstunden</caption>
+                <thead class="table-head">
+                    <tr>
+                        <th class="appointment-table-header" id="header-date">Datum</th>
+                        <th class="appointment-table-header" id="header-timerange">Uhrzeit</th>
+                        <th class="appointment-table-header" id="header-topic">Sprechstundengrund</th>
+                        <th class="appointment-table-header" id="header-lastname">Nachname</th>
+                        <th class="appointment-table-header" id="header-firstname">Vorname</th>
+                        <th class="appointment-table-header" id="header-email">E-Mail</th>
+                        <th class="appointment-table-header" id="header-comment">Kommentar</th> <!--Für den Admin-->
+                        <th class="appointment-table-header" id="header-delete">Löschen</th> <!--Für den Admin-->
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!--AppointmentOverview.js-->
+                </tbody>
+            </table>
+        </div>
+    
+        <script src="/js/src/Start.js" type="text/javascript"></script>
+        <script src="/js/src/AppointmentCreation.js" type="text/javascript"></script>
+        <script src="/js/src/AppointmentOverview.js" type="text/javascript"></script>
+        <script src="/js/src/DatabaseAppointments.js" type="text/javascript"></script>
+        <script src="/js/src/DatabaseInquiries.js" type="text/javascript"></script>
+    
+        <!--FIREBASE Datenbank-->
+        <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+        <script>
+          // Initialize Firebase
+          var config = {
+            apiKey: "AIzaSyCeS6X2wwWYmTzQFhi-zuGR0QeCg-7ObGc",
+            authDomain: "terminplaner-ur.firebaseapp.com",
+            databaseURL: "https://terminplaner-ur.firebaseio.com",
+            projectId: "terminplaner-ur",
+            storageBucket: "terminplaner-ur.appspot.com",
+            messagingSenderId: "815922221986"
+          };
+          firebase.initializeApp(config);
+        </script>
+    
+    </body>
+    
+
+    <script>
+        $(document).ready(function() {
+            Scheduler.Start.init();
+        });
+    </script>
+
+    <script src="js/libs/jquery.min.js"></script>
+    <script src="js/libs/moment.min.js"></script>
+    <script src="js/libs/fullcalendar.min.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            $('#calendar').fullCalendar({
+                // put your options and callbacks here
+            })
+        });
+    </script>
+
+</html>

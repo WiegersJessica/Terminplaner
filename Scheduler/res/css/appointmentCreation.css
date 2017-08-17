@@ -1,0 +1,187 @@
+ul {
+    font: normal 14px 'Bitter', serif;
+}
+
+.appointment-creation-box {
+    margin-top: -20px;
+}
+
+.calendar-container {
+    margin-top: 10px;
+}
+
+.appointment-creation-form {
+    
+}
+
+/*
+label {
+    padding-bottom: 5px;
+    font-size: 16px;
+}
+*/
+
+.inner-wrap {
+    display: inline-block;
+    width: 96%;
+    padding: 10px;
+    margin: 10px;
+    margin-left: 4%;
+    background: #F8F8F8;
+    border-radius: 6px;
+}
+
+.topic-container, .duration-container, .date-container, .timerange-container, .overview-container, .appointments-container, .name-container, .prename-container, .email-container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.section {
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.section-header {
+    margin-left: 52px;
+    margin-bottom: 5px;
+    font: normal 18px 'Bitter', serif;
+    color: #2A88AD;
+}
+
+#topic-list {
+    font-size: 14px;
+}
+
+.possible-appointment-container {
+    display: inline-block;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.possible-time {
+    float: left;
+    margin-right: 5px;
+}
+
+.form-style {
+    width: 450px;
+    padding: 30px;
+    margin: 0 auto;
+    background: #FFF;
+    
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);
+    -moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);
+    -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);
+}
+
+.form-style h1 > span { /*Kreis: 1, 2, 3, 4*/
+    display: block;
+    margin-top: 2px;
+    font: 13px Arial, Helvetica, sans-serif;
+}
+
+.form-style label {
+    display: block;
+    margin-bottom: 15px;
+    font: 16px Arial, Helvetica, sans-serif;
+    color: #888;
+}
+
+.form-style input[type="text"],
+.form-style input[type="date"],
+.form-style input[type="datetime"],
+.form-style input[type="email"],
+.form-style input[type="number"],
+.form-style input[type="search"],
+.form-style input[type="time"],
+.form-style input[type="url"],
+.form-style input[type="password"] {
+    display: block;
+    width: 100%;
+    margin-left: -3px;
+    padding: 8px;
+    border: 2px solid #fff;
+    
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    
+    box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.33);
+    -moz-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.33);
+    -webkit-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.33);
+}
+
+.form-style .section-header {
+    
+}
+
+.form-style .section-header span {
+    position: absolute;
+    margin-top: -3px;
+    margin-left: -45px;
+    padding: 5px 10px 5px 10px;
+    font-size: 14px;
+    color: #fff;
+    background: #2A88AD;
+    border: 4px solid #fff;
+    
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+}
+
+#appointment-button, #request-button {
+    position: relative;
+    display: block;
+    margin: auto;
+    text-align: center;
+    padding: 8px 20px 8px 20px;
+    font: normal 30px 'Bitter', serif;
+    font-size: 15px;
+    
+    background: #2A88AD;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.12);
+    border: 1px solid #257C9E;
+    
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    
+    box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+    -moz-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+    -webkit-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+}
+
+#appointment-button {
+    color: #fff;
+}
+
+#request-button {
+    margin-top: 30px;
+    color: #888;
+    background: transparent;
+    border: 1px solid #888;
+}
+
+#appointment-button:hover, #request-button:hover {
+    opacity: 0.9;
+    background: #2A6881;
+    
+    box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.28);
+    -moz-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.28);
+    -webkit-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.28);
+}
+
+#request-button:hover {
+    opacity: 0.9;
+    background: transparent;
+}
+
