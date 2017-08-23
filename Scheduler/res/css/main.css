@@ -2,3 +2,9 @@ h2 {
     font: 30px Arial, Helvetica, sans-serif !important; /**/
     margin: 10px !important;
 }
+
+#login_button{
+    margin-right: 5px;
+    margin-top: 15px;
+    color: grey;
+}
