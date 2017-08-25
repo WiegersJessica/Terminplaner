@@ -54,7 +54,7 @@ Scheduler.Start = (function () {
         });
     }
     
-    //Header Reiter: Terminerstellung, Terminübersicht
+    //Header Reiter: Terminerstellung, Terminübersicht, Terminverwaltung
     function initHeader() {
         initHeaderCreation();
         initHeaderOverview();
