@@ -9,7 +9,9 @@ Scheduler.Login = (function () {
         signInButton,
         inputEmail,
         inputPassword,
-        passwordWrongAlert;
+        passwordWrongAlert,
+        loginWindow,
+        adminWindow;
     
    
     function checkSignIn(){
@@ -18,6 +20,19 @@ Scheduler.Login = (function () {
         console.log(inputEmail);
         if(inputEmail == email & inputPassword == password){
             console.log("hier auf Admin Seite verlinken");
+            //location.href = 'admin.html';
+           // location.href = 'admin.html';
+            
+            //Scheduler.AdminStart.init();
+            loginWindow.classList.add("hidden");
+            adminWindow.classList.remove("hidden");
+           //Kalender laden
+            $(document).ready(function() {
+                $('#calendar_admin').fullCalendar({
+                // put your options and callbacks here
+                })
+            });
+  
         } else{
             passwordWrongAlert.classList.remove("hidden");
             window.setTimeout(function() {
@@ -32,6 +47,8 @@ Scheduler.Login = (function () {
         signInButton = document.getElementById("sign_in_button");
         signInButton.addEventListener("click", checkSignIn);
         passwordWrongAlert = document.getElementById("password-wrong");
+        loginWindow = document.getElementById("login_window");
+        adminWindow = document.getElementById("admin_window");
         
     }
     

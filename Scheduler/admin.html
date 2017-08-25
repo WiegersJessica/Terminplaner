@@ -5,6 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1"> <!--Optimieren für mobile Geräte-->
         <title>Scheduler</title>
         
+         
+        
         <!--Firebase-->
         <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
         
@@ -12,7 +14,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         
         <!--Bootstrap-->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
         
@@ -24,21 +26,39 @@
         <link rel="stylesheet" href="res/css/scrolling.css">
         <link rel="stylesheet" href="res/css/main.css">
         
-        
         <link href='http://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
     </head>
     
     <body>
-        <!--HEADER-->
-        <nav class="navbar navbar-default">
+        
+        <div id="login_window" class="col-md-4 container" style="float:initial">
+
+      <form class="form-signin">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <button id="sign_in_button" class="btn btn-lg btn-primary btn-block" type="button">Sign in</button>
+          <div id="password-wrong" class="alert alert-danger hidden" role="alert">
+             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+             <span class="sr-only">Fehler:</span>
+             Falscher Benutzername oder Passwort
+        </div>
+      </form>
+
+    </div>
+        
+        <div id="admin_window" class="hidden">
+            <nav class="navbar navbar-default">
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li class="creation-appointment-button active"><a href="">Terminerstellung</a></li>
                     <li class="overview-appointment-button"><a href="#Uebersicht">Terminübersicht</a></li>
-                    <li class="administration-appointment-button"><a href="#Verwaltung">Terminverwaltung</a></li>
+                    <li class="open-appointment-button"><a href="#Anfragen">offene Anfragen</a></li>
                 </ul>
-                <a id="login_button" class="navbar-right" title="Admin Login" href="admin.html">
-                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
+                <a id="login_button" class="navbar-right" title="Admin Logout" href="index.html">
+                    <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a>
             </div>
         </nav>
         
@@ -81,67 +101,20 @@
                             </div>
                         </div>
 
-                        <div class="section">
-                            <div class="section-header"><span>3</span>Freie Termine</div>
-                            <div class="inner-wrap">
-                                <div class="form-group overview-container">
-                                    <label for="date" id="overview-label">Stundenübersicht...Kreisdarstellung</label>
-                                    <!-- Hier Kreis -->
-                                </div>
-                                <!--<div class="col-md-6 form-group appointments-container">
-                                    <label for="possible-times">Mögliche Termine</label>
-                                    <div class="possible-appointment-container">
-                                        <input type="time" style="width:45%" class="form-control possible-time" placeholder="Start" >
-                                        <input type="time" style="width:45%" class="form-control possible-time" placeholder="Ende" >
-                                    </div>
-                                    <div class="possible-appointment-container">
-                                        <input type="time" style="width:45%" class="form-control possible-time" placeholder="Start" >
-                                        <input type="time" style="width:45%" class="form-control possible-time" placeholder="Ende" >
-                                    </div>
-                                </div>-->
-                            </div>
-                        </div>
+                     
 
-                        <div class="section">
-                            <div class="section-header"><span>4</span>Name und E-Mail</div>
-                            <div class="inner-wrap">
-                                <div class="col-md-6 form-group name-container">
-                                    <label for="name">Name</label>
-                                    <input type="text" class="form-control" id="name" placeholder="Name" >
-                                </div>
-
-                                <div class="col-md-6 form-group prename-container">
-                                    <label for="prename">Vorname</label>
-                                    <input type="text" class="form-control" id="prename" placeholder="Vorname" >
-                                </div>  
-
-                                <div class="col-md-6 form-group email-container">
-                                    <label for="input_email">Email</label>
-                                    <input type="email" class="form-control" id="email" placeholder="E-Mail" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="section">
-                            <div class="section-header"><span>5</span>Kein freier Termin verfügbar?</div>
-                            <div class="inner-wrap">
-                                <div class="form-group name-container">
-                                    <label for="name">Mach das kenntlich und sende eine offene Anfrage.</label>
-                                    <input type="button" id="request-button" value="Anfrage senden" /> <!--submit-->
-                                </div>
-                            </div>
-                        </div>
+                     
 
                         <div class="button-section">
                             <input type="submit" id="appointment-button" value="Termin eintragen" /> <!--submit-->
                         </div>
                     </form>
                 </div>
-            
+        </div>
+    
          <div class="col-md-8 calendar-container">
-             <div id="calendar"></div>
-            </div> 
-        </div>  
+             <div id="calendar_admin"></div>
+            </div>   
             </div>
     
         <div class="appointment-overview-box">
@@ -165,22 +138,9 @@
                     <!--AppointmentOverview.js-->
                 </tbody>
             </table>
-        </div>
-    
-        <div class="appointment-administration-box">
-            <h2 class="appointment-administration-header">Lösche deine Terminanfragen:</h2>
-            <div class="col-md-2 container" style="float:initial">
-            <form class="appointment-administration">
-                <input type="code" id="inputCode" class="form-control" placeholder="Code" required autofocus>
-                <button id="enter_code_button" class="btn btn-lg btn-primary btn-block" type="button">Zeigen</button>
-                <div id="code-wrong" class="alert alert-danger hidden" role="alert">
-                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                    <span class="sr-only">Fehler:</span>Der Code existiert nicht
-                </div>
-            </form>
-            </div>
-        </div>
-    
+        
+    </div>
+        <script src="/js/src/Login.js" type="text/javascript"></script>
         <script src="/js/src/Start.js" type="text/javascript"></script>
         <script src="/js/src/AdminStart.js" type="text/javascript"></script>
         <script src="/js/src/AppointmentCreation.js" type="text/javascript"></script>
@@ -202,27 +162,20 @@
           };
           firebase.initializeApp(config);
         </script>
+        </div>
     
     </body>
-    
-
     <script>
         $(document).ready(function() {
-            Scheduler.Start.init();
+            Scheduler.Login.init();
         });
     </script>
+
+   
 
     <script src="js/libs/jquery.min.js"></script>
     <script src="js/libs/moment.min.js"></script>
     <script src="js/libs/fullcalendar.min.js"></script>
 
-
-    <script>
-        $(document).ready(function() {
-            $('#calendar').fullCalendar({
-                // put your options and callbacks here
-            })
-        });
-    </script>
 
 </html>
