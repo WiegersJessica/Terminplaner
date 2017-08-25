@@ -80,7 +80,7 @@ Scheduler.Start = (function () {
         Scheduler.DatabaseAppointments.init();
         //Scheduler.DatabaseInquiries.init();
         
-        
+        //noch auslagern!!!!!!!!!!!!!!!!!
         $('#calendar').fullCalendar({
 
     eventSources: [
