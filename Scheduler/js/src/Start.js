@@ -5,8 +5,25 @@ Scheduler.Start = (function () {
     var that = {},
         creationAppointmentContainer,
         overviewAppointmentContainer,
+        administrationAppointmentContainer,
         creationButtonHeader,
-        overviewButtonHeader;
+        overviewButtonHeader,
+        administrationButtonHeader;
+    
+     //Klick-Event: Reiter Terminverwaltung
+    function initHeaderAdministration() {
+        administrationButtonHeader = document.querySelector(".administration-appointment-button");
+        administrationButtonHeader.addEventListener("click", function() {
+            creationAppointmentContainer.style.display = "none";
+            overviewAppointmentContainer.style.display = "none";
+            administrationAppointmentContainer.style.display = "block";
+            creationButtonHeader.classList.remove("active");
+            overviewButtonHeader.classList.remove("active");
+            administrationButtonHeader.classList.add("active");
+            
+           // Scheduler.AppointmentOverview.init();
+        });
+    }
     
     //Klick-Event: Reiter Terminübersicht
     function initHeaderOverview() {
@@ -14,8 +31,11 @@ Scheduler.Start = (function () {
         overviewButtonHeader.addEventListener("click", function() {
             creationAppointmentContainer.style.display = "none";
             overviewAppointmentContainer.style.display = "block";
-            overviewButtonHeader.classList.add("active");
+            administrationAppointmentContainer.style.display = "none";
             creationButtonHeader.classList.remove("active");
+            overviewButtonHeader.classList.add("active");
+            administrationButtonHeader.classList.remove("active");
+            
             
             Scheduler.AppointmentOverview.init();
         });
@@ -27,8 +47,10 @@ Scheduler.Start = (function () {
         creationButtonHeader.addEventListener("click", function() {
             creationAppointmentContainer.style.display = "block";
             overviewAppointmentContainer.style.display = "none";
-            overviewButtonHeader.classList.remove("active");
+            administrationAppointmentContainer.style.display = "none";
             creationButtonHeader.classList.add("active");
+            overviewButtonHeader.classList.remove("active");
+            administrationButtonHeader.classList.remove("active");
         });
     }
     
@@ -36,15 +58,19 @@ Scheduler.Start = (function () {
     function initHeader() {
         initHeaderCreation();
         initHeaderOverview();
+        initHeaderAdministration();
     }
     
-    //Ansichten: Terminerstellung, Terminübersicht
+    //Ansichten: Terminerstellung, Terminübersicht, Terminverwaltung
     function initContainers() {
         creationAppointmentContainer = document.querySelector(".appointment-creation-box");
         creationAppointmentContainer.style.display = "block";
         
         overviewAppointmentContainer = document.querySelector(".appointment-overview-box");
         overviewAppointmentContainer.style.display = "none";
+        
+        administrationAppointmentContainer = document.querySelector(".appointment-administration-box");
+        administrationAppointmentContainer.style.display = "none";
     }
     
     function init() {

@@ -50,16 +50,15 @@
     </div>
         
         <div id="admin_window" class="hidden">
-        <!--HEADER-->
-        <nav class="navbar navbar-default">
+            <nav class="navbar navbar-default">
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li class="creation-appointment-button active"><a href="">Terminerstellung</a></li>
                     <li class="overview-appointment-button"><a href="#Uebersicht">Terminübersicht</a></li>
-                    <li class="overview-appointment-button"><a href="#Anfragen">offene Anfragen</a></li>
+                    <li class="open-appointment-button"><a href="#Anfragen">offene Anfragen</a></li>
                 </ul>
-                <a id="login_button" class="navbar-right" title="Admin Login" href="index.html">
-                        <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a>
+                <a id="login_button" class="navbar-right" title="Admin Logout" href="index.html">
+                    <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a>
             </div>
         </nav>
         
@@ -102,68 +101,21 @@
                             </div>
                         </div>
 
-                        <div class="section">
-                            <div class="section-header"><span>3</span>Freie Termine</div>
-                            <div class="inner-wrap">
-                                <div class="form-group overview-container">
-                                    <label for="date" id="overview-label">Stundenübersicht...Kreisdarstellung</label>
-                                    <!-- Hier Kreis -->
-                                </div>
-                                <!--<div class="col-md-6 form-group appointments-container">
-                                    <label for="possible-times">Mögliche Termine</label>
-                                    <div class="possible-appointment-container">
-                                        <input type="time" style="width:45%" class="form-control possible-time" placeholder="Start" >
-                                        <input type="time" style="width:45%" class="form-control possible-time" placeholder="Ende" >
-                                    </div>
-                                    <div class="possible-appointment-container">
-                                        <input type="time" style="width:45%" class="form-control possible-time" placeholder="Start" >
-                                        <input type="time" style="width:45%" class="form-control possible-time" placeholder="Ende" >
-                                    </div>
-                                </div>-->
-                            </div>
-                        </div>
+                     
 
-                        <div class="section">
-                            <div class="section-header"><span>4</span>Name und E-Mail</div>
-                            <div class="inner-wrap">
-                                <div class="col-md-6 form-group name-container">
-                                    <label for="name">Name</label>
-                                    <input type="text" class="form-control" id="name" placeholder="Name" >
-                                </div>
-
-                                <div class="col-md-6 form-group prename-container">
-                                    <label for="prename">Vorname</label>
-                                    <input type="text" class="form-control" id="prename" placeholder="Vorname" >
-                                </div>  
-
-                                <div class="col-md-6 form-group email-container">
-                                    <label for="input_email">Email</label>
-                                    <input type="email" class="form-control" id="email" placeholder="E-Mail" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="section">
-                            <div class="section-header"><span>5</span>Kein freier Termin verfügbar?</div>
-                            <div class="inner-wrap">
-                                <div class="form-group name-container">
-                                    <label for="name">Mach das kenntlich und sende eine offene Anfrage.</label>
-                                    <input type="button" id="request-button" value="Anfrage senden" /> <!--submit-->
-                                </div>
-                            </div>
-                        </div>
+                     
 
                         <div class="button-section">
                             <input type="submit" id="appointment-button" value="Termin eintragen" /> <!--submit-->
                         </div>
                     </form>
                 </div>
-
-                <div class="col-md-8 calendar-container">
-             <div id="calendar"></div>
+        </div>
+    
+         <div class="col-md-8 calendar-container">
+             <div id="calendar_admin"></div>
             </div>   
             </div>
-        </div>
     
         <div class="appointment-overview-box">
             <h2 class="appointment-overview-header">Sprechstunden-Übersicht</h2>
@@ -186,11 +138,10 @@
                     <!--AppointmentOverview.js-->
                 </tbody>
             </table>
-        </div>
-    
-</div>
-    
+        
+    </div>
         <script src="/js/src/Login.js" type="text/javascript"></script>
+        <script src="/js/src/Start.js" type="text/javascript"></script>
         <script src="/js/src/AdminStart.js" type="text/javascript"></script>
         <script src="/js/src/AppointmentCreation.js" type="text/javascript"></script>
         <script src="/js/src/AppointmentOverview.js" type="text/javascript"></script>
@@ -211,6 +162,7 @@
           };
           firebase.initializeApp(config);
         </script>
+        </div>
     
     </body>
     <script>
@@ -225,13 +177,5 @@
     <script src="js/libs/moment.min.js"></script>
     <script src="js/libs/fullcalendar.min.js"></script>
 
-
-    <script>
-        $(document).ready(function() {
-            $('#calendar').fullCalendar({
-                // put your options and callbacks here
-            })
-        });
-    </script>
 
 </html>
