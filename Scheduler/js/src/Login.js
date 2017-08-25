@@ -26,6 +26,13 @@ Scheduler.Login = (function () {
             //Scheduler.AdminStart.init();
             loginWindow.classList.add("hidden");
             adminWindow.classList.remove("hidden");
+           //Kalender laden
+            $(document).ready(function() {
+                $('#calendar_admin').fullCalendar({
+                // put your options and callbacks here
+                })
+            });
+  
         } else{
             passwordWrongAlert.classList.remove("hidden");
             window.setTimeout(function() {
