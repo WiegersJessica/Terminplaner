@@ -79,39 +79,9 @@ Scheduler.Start = (function () {
         Scheduler.AppointmentCreation.init(); //Ansicht Terminerstellung ist zu Beginn aktiv
         Scheduler.DatabaseAppointments.init();
         //Scheduler.DatabaseInquiries.init();
+        Scheduler.CalendarAppointments.setCalendarEntries();
         
-        //noch auslagern!!!!!!!!!!!!!!!!!
-        $('#calendar').fullCalendar({
-
-    eventSources: [
-
-        // your event source
-        {
-            events: [ // put the array in the `events` property
-                {
-                    title  : 'Sprechstunde1',
-                    start  : '2017-08-01'
-                },
-                {
-                    title  : 'Sprechstunde2',
-                    start  : '2017-08-05',
-                    end    : '2017-08-07'
-                },
-                {
-                    title  : 'Sprechstunde3',
-                    start  : '2017-08-09 12:30:00',
-                    end    : '2017-08-10 13:30:00',
-                }
-            ],
-            color: 'grey',     // an option!
-            textColor: 'white' // an option!
-        }
-
-        // any other event sources...
-
-    ]
-
-});
+       
       
     }
     
