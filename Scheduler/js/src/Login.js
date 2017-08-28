@@ -22,16 +22,14 @@ Scheduler.Login = (function () {
             loginWindow.classList.add("hidden");
             adminWindow.classList.remove("hidden");
            //Kalender laden
-            Scheduler.CalendarAppointments.setCalendarEntries();
+            Scheduler.CalendarAppointments.setCalendarEntries("admin");
             Scheduler.AdminStart.init();
   
         } else{
             passwordWrongAlert.classList.remove("hidden");
             window.setTimeout(function() {
                  passwordWrongAlert.classList.add("hidden")}, 5000);
-        }
-        
-        
+        }        
     }
     
     

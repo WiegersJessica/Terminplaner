@@ -3,12 +3,15 @@ Scheduler.CalendarAppointments = (function () {
     "use strict";
     /* eslint-env browser  */
     var that = {},
-        deleteButton;
+        deleteButton,
+        userRight;
     
     
     //noch Sprechstundenzeiten aus der Datenbank holen
     //nur Admin Berechtigung zu löschen evt. bei Klick löschen --> Alert wirklich löschen
-    function setCalendarEntries(){
+    function setCalendarEntries(user){
+        console.log("log" + user);
+        userRight = user;
         $('#calendar').fullCalendar({
             locale: 'de',
             firstDay: 1,
@@ -71,23 +74,38 @@ Scheduler.CalendarAppointments = (function () {
                                 start: '10:00', // a start time (10am in this example)
                                 end: '18:00', // an end time (6pm in this example)
                             },
-            eventClick: function(event, element) {
-                //event.title = "CLICKED!";
-                deleteBusinessHour(event);
-
-
-    }
+            
+                    eventClick: function(event, element) {
+                        if(userRight == "admin"){
+                            deleteBusinessHour(event);
+                        }
+                        },
+            
+            eventMouseover: function(event, element){
+                console.log(element.target);
+                element.target.setAttribute ('style','cursor:default');
+                element.target.style.backgroundColor = "grey";
+                //evt. cursor:url(path_to_file.cur)
+                if(userRight == "admin"){
+                    element.target.setAttribute ('style','cursor:pointer');
+                //element.target.style.backgroundColor = "grey";
+                }
+                
+            },
+            
+           
 
 });
     }
     
     function deleteBusinessHour(event){
+        $('#deleteModal').modal("show");
         deleteButton = document.getElementById("delete_Button");
         deleteButton.addEventListener("click", function(){
             $('#deleteModal').modal("hide");
             $('#calendar').fullCalendar('removeEvents' , event._id);
+            //delete Event from Database
         });
-        $('#deleteModal').modal("show");
     }
     
   

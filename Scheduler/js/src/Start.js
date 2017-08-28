@@ -79,7 +79,7 @@ Scheduler.Start = (function () {
         Scheduler.AppointmentCreation.init(); //Ansicht Terminerstellung ist zu Beginn aktiv
         Scheduler.DatabaseAppointments.init();
         //Scheduler.DatabaseInquiries.init();
-        Scheduler.CalendarAppointments.setCalendarEntries();
+        Scheduler.CalendarAppointments.setCalendarEntries("user");
         
        
       
