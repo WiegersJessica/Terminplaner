@@ -17,25 +17,19 @@ Scheduler.Login = (function () {
     function checkSignIn(){
         inputEmail = document.getElementById("inputEmail").value;
         inputPassword = document.getElementById("inputPassword").value;
-        console.log(inputEmail);
         if(inputEmail == email & inputPassword == password){
-            console.log("hier auf Admin Seite verlinken");
-            //location.href = 'admin.html';
-           // location.href = 'admin.html';
-            
-            //Scheduler.AdminStart.init();
+        //if(inputEmail == "a"){
             loginWindow.classList.add("hidden");
             adminWindow.classList.remove("hidden");
            //Kalender laden
-           Scheduler.CalendarAppointments.setCalendarEntries();
+            Scheduler.CalendarAppointments.setCalendarEntries("admin");
+            Scheduler.AdminStart.init();
   
         } else{
             passwordWrongAlert.classList.remove("hidden");
             window.setTimeout(function() {
                  passwordWrongAlert.classList.add("hidden")}, 5000);
-        }
-        
-        
+        }        
     }
     
     
