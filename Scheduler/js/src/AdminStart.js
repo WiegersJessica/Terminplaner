@@ -10,7 +10,7 @@ Scheduler.AdminStart = (function () {
     
     //Klick-Event: Reiter Terminübersicht
     function initHeaderOverview() {
-        overviewButtonHeader = document.querySelector(".overview-appointment-button");
+        overviewButtonHeader = document.querySelector(".overview-appointment-button_admin");
         overviewButtonHeader.addEventListener("click", function() {
             creationAppointmentContainer.style.display = "none";
             overviewAppointmentContainer.style.display = "block";
@@ -23,7 +23,7 @@ Scheduler.AdminStart = (function () {
     
     //Klick-Event: Reiter Terminerstellung
     function initHeaderCreation() {
-        creationButtonHeader = document.querySelector(".creation-appointment-button");
+        creationButtonHeader = document.querySelector(".creation-appointment-button_admin");
         creationButtonHeader.addEventListener("click", function() {
             creationAppointmentContainer.style.display = "block";
             overviewAppointmentContainer.style.display = "none";
@@ -40,25 +40,18 @@ Scheduler.AdminStart = (function () {
     
     //Ansichten: Terminerstellung, Terminübersicht
     function initContainers() {
-        creationAppointmentContainer = document.querySelector(".appointment-creation-box");
+        creationAppointmentContainer = document.querySelector(".appointment-creation-box_admin");
         creationAppointmentContainer.style.display = "block";
         
-        overviewAppointmentContainer = document.querySelector(".appointment-overview-box");
+        overviewAppointmentContainer = document.querySelector(".appointment-overview-box_admin");
         overviewAppointmentContainer.style.display = "none";
     }
     
-    function init(user) {
-        console.log(user);
-        if(user == "admin"){
-            console.log("admin");
-            location.href = "admin.html";
-        }
-        else{
-            /*Wenn admin.html aufgerufen wird ohne eingeloggt zu sein*/
-           // location.href = "index.html";
-        }
-       // initContainers();
-    //    initHeader();
+    function init() {
+        console.log("user");
+        
+        initContainers();
+        initHeader();
       //  Scheduler.AppointmentCreation.init(); //Ansicht Terminerstellung ist zu Beginn aktiv
     //    Scheduler.DatabaseAppointments.init();
         //Scheduler.DatabaseInquiries.init();
