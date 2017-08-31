@@ -3,9 +3,13 @@ Scheduler.CalendarAppointments = (function () {
     "use strict";
     /* eslint-env browser  */
     var that = {},
+        OFFICE_HOURS = "Sprechstunden",
         deleteButton,
         userRight;
     
+    
+    function setupOfficeHours() {
+    }
     
     //noch Sprechstundenzeiten aus der Datenbank holen
     //nur Admin Berechtigung zu löschen evt. bei Klick löschen --> Alert wirklich löschen
@@ -15,12 +19,16 @@ Scheduler.CalendarAppointments = (function () {
         $('#calendar').fullCalendar({
             locale: 'de',
             firstDay: 1,
-            //defaultView: 'agenda', // or 'agenda' or 'basic'    
+            //weekends: false, // will hide Saturdays and Sundays
+            //defaultView: 'agenda', // or 'agenda' or 'basic'
+            /*dayClick: function(event) {
+                alert('a day has been clicked!');
+            },*/
              header: {
                  center: 'month,week,day' // buttons for switching between views
-    },
-            //timezone: 'local',
-            views: {
+             },
+             //timezone: 'local',
+             views: {
                 month: {
                     type: 'agenda',
                     buttonText: 'Monat',
@@ -33,16 +41,16 @@ Scheduler.CalendarAppointments = (function () {
                     buttonText: 'Woche',
                     //hiddenDays: [ 0, 6 ]
                     },
-                day:{
+                day: {
                     type: 'agenda',
                     duration: { days: 1 },
                     buttonText: 'Tag'
-        
-                    }
-    },
+                }
+            },
             eventSources: [
                 // your event source
                 {
+                    //setupOfficeHours();
                     events: [ // put the array in the `events` property
                         {
                             title  : 'Sprechstunde1',
@@ -92,10 +100,30 @@ Scheduler.CalendarAppointments = (function () {
                 }
                 
             },
-            
-           
-
-});
+        });
+        
+        
+        //Sprechstunden aus der Datenbank
+        //Uhrzeit noch anpassen
+        var ref, date, timerange, appointment;
+        ref = new Firebase("https://terminplaner-ur.firebaseio.com/" + OFFICE_HOURS);
+        ref.once("value", function (snapshot) {
+            snapshot.forEach(function(childSnapshot) {
+                
+                appointment = childSnapshot.val();
+                date = appointment.date;
+                timerange = appointment.timerange;
+                
+                var officeHour = {
+                    title: "Sprechstunde",
+                    start: date + " 12:00:00",
+                    end: date + " 14:00:00"
+                };
+                
+                $('#calendar').fullCalendar('renderEvent', officeHour, true);
+                //FARBE
+            });
+       });
     }
     
     function deleteBusinessHour(event){

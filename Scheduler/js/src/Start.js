@@ -3,12 +3,21 @@ Scheduler.Start = (function () {
     "use strict";
     
     var that = {},
+        login,
         creationAppointmentContainer,
         overviewAppointmentContainer,
         administrationAppointmentContainer,
         creationButtonHeader,
         overviewButtonHeader,
         administrationButtonHeader;
+    
+    function getLogin() {
+        return login;
+    }
+    
+    function setLogin() {
+        login = true;
+    }
     
      //Klick-Event: Reiter Terminverwaltung
     function initHeaderAdministration() {
@@ -74,17 +83,18 @@ Scheduler.Start = (function () {
     }
     
     function init() {
+        $(window).scrollTop(0);
+        login = false;
         initContainers();
         initHeader();
         Scheduler.AppointmentCreation.init(); //Ansicht Terminerstellung ist zu Beginn aktiv
         Scheduler.DatabaseAppointments.init();
         //Scheduler.DatabaseInquiries.init();
         Scheduler.CalendarAppointments.setCalendarEntries("user");
-        
-       
-      
     }
     
     that.init = init;
+    that.getLogin = getLogin;
+    that.setLogin = setLogin;
     return that;
 }());

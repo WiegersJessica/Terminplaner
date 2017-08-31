@@ -3,6 +3,7 @@ Scheduler.AppointmentCreation = (function () {
     "use strict";
     
     var that = {},
+        TOPICS = "Sprechstundengründe",
         topicField,
         durationField,
         dateField,
@@ -10,11 +11,39 @@ Scheduler.AppointmentCreation = (function () {
         lastnameField,
         firstnameField,
         emailField,
-        
-        /*DATENBANK - VORAB LÖSUNG MIT ARRAY UND MAP*/
-        topicArray = ["Thema eins", "Thema zwei", "Thema drei", "Thema vier"],
-        durationArray = ["10", "5", "15", "20"],
         topicDurationMap = {};
+    
+    function initChart(){
+            var ctx = document.getElementById("myChart");
+            var myPieChart = new Chart(ctx, {
+                type: 'doughnut',
+    data: {
+        labels: ["besetzt", "besetzt", "frei", "besetzt", "frei", "frei"],
+        datasets: [{
+            //label: '# of Votes',
+            data: [7, 10, 5, 5, 2, 3],
+            backgroundColor: [
+                'rgb(205,92,92)',
+                'rgb(205,92,92)',
+                'rgb(152,251,152)',
+                'rgb(205,92,92)',
+                'rgb(152,251,152)',
+                'rgb(152,251,152)'
+            ],
+            borderColor: [
+                
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        cutoutPercentage: 50,
+        tooltips: {
+            enabled: true
+        }
+    }
+});
+    }
     
     function checkInputFields() {
         if (topicField.value === "" || dateField.value === "" || timerangeField.value === "" || lastnameField.value === "" || firstnameField.value === "" || emailField.value === "") {
@@ -27,16 +56,13 @@ Scheduler.AppointmentCreation = (function () {
         var appointmentButton, date, timerange, lastname, firstname, email, topic;
         appointmentButton = document.querySelector("#appointment-button");
         appointmentButton.addEventListener("click", function() {
-            //Datum, Uhrzeit, Nachname, Vorname, E-Mail, Grund -> DB
             date = dateField.value;
             timerange = timerangeField.value;
             lastname = lastnameField.value;
             firstname = firstnameField.value;
-            email = emailField.value;
+            email = emailField.value; //Validate E-Mail
             topic = topicField.value;
-            //Validate E-Mail
-            
-            //if(checkInputFields()) {
+            //if(checkInputFields()) { alles muss ausgefüllt sein!
                 Scheduler.DatabaseAppointments.setDataToDatabase(date, timerange, lastname, firstname, email, topic);
             //}
         });
@@ -65,23 +91,32 @@ Scheduler.AppointmentCreation = (function () {
         });
     }
     
-    function setupTopicList() {
-        var topicList, topic;
-        topicList = document.querySelector("#topics");
-        for (var i = 0; i < topicArray.length; i++) {
-            topic = document.createElement("option");
-            topic.class = "topic-option";
-            topic.id = "option-" + i + 1;
-            topic.value = topicArray[i];
-            topic.setAttribute("duration", topicDurationMap[i]);
-            topicList.appendChild(topic);
-        }
+    function setupTopicDurationMap(topic, duration) {
+        topicDurationMap[topic] = duration;
     }
     
-    function setupTopicDurationMap() {
-        for (var i = 0; i < topicArray.length; i++) {
-            topicDurationMap[topicArray[i]] = durationArray[i] + " Minuten";
-        }
+    function setupTopic(topic, duration) {
+        var topicList, topicElement;
+        topicList = document.querySelector("#topics");
+        topicElement = document.createElement("option");
+        topicElement.class = "topic-option";
+        topicElement.value = topic;
+        topicList.appendChild(topicElement);
+    }
+    
+    function setupTopicList() {
+        var ref, appointment, topic, duration;
+        ref = new Firebase("https://terminplaner-ur.firebaseio.com/" + TOPICS);
+        ref.once("value", function (snapshot) {
+            snapshot.forEach(function(childSnapshot) {
+                appointment = childSnapshot.val();
+                topic = appointment.topic;
+                duration = appointment.duration;
+                
+                setupTopic(topic, duration);
+                setupTopicDurationMap(topic, duration);
+            });
+        }); 
     }
     
     function initAppointmentInformation() {
@@ -95,7 +130,6 @@ Scheduler.AppointmentCreation = (function () {
         
         //Kein Termin mehr verfügbar --> Terminanfrage senden
         
-        setupTopicDurationMap();
         setupTopicList();
         checkTopicAndDuration();
     }
@@ -103,6 +137,7 @@ Scheduler.AppointmentCreation = (function () {
     function initAppointmentForm() {
         initAppointmentInformation();
         initAppointmentButton();
+        initChart();
     }
     
     function init() {

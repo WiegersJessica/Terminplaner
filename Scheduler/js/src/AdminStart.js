@@ -35,7 +35,6 @@ Scheduler.AdminStart = (function () {
             overviewButtonHeader.classList.add("active");
             creationButtonHeader.classList.remove("active");
             administrationButtonHeader.classList.remove("active");
-            
             Scheduler.AppointmentOverview.init();
         });
     }
@@ -72,14 +71,15 @@ Scheduler.AdminStart = (function () {
         administrationAppointmentContainer.style.display = "none";
     }
     
+    
+    
     function init() {
         console.log("user");
-        
         initContainers();
         initHeader();
-      //  Scheduler.AppointmentCreation.init(); //Ansicht Terminerstellung ist zu Beginn aktiv
-    //    Scheduler.DatabaseAppointments.init();
-        //Scheduler.DatabaseInquiries.init();
+        Scheduler.CreationAdmin.init(); //Ansicht Terminerstellung ist zu Beginn aktiv
+        Scheduler.DatabaseTopics.init();
+        Scheduler.DatabaseOfficeHours.init();
     }
     
     that.init = init;
