@@ -2,7 +2,7 @@ ul {
     font: normal 14px 'Bitter', serif;
 }
 
-.appointment-creation-box {
+.appointment-creation-box, .appointment-creation-box_admin {
     margin-top: -20px;
 }
 
@@ -138,7 +138,7 @@ label {
     -moz-border-radius: 50%;
 }
 
-#appointment-button, #request-button {
+#appointment-button, #request-button, #add-topic-button_admin, #add-appointment-button_admin {
     position: relative;
     display: block;
     margin: auto;
@@ -160,7 +160,7 @@ label {
     -webkit-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
 }
 
-#appointment-button {
+#appointment-button, #add-topic-button_admin, #add-appointment-button_admin {
     color: #fff;
 }
 
@@ -171,7 +171,7 @@ label {
     border: 1px solid #888;
 }
 
-#appointment-button:hover, #request-button:hover {
+#appointment-button:hover, #request-button:hover, #add-topic-button_admin:hover, #add-appointment-button_admin:hover {
     opacity: 0.9;
     background: #2A6881;
     
@@ -184,4 +184,3 @@ label {
     opacity: 0.9;
     background: transparent;
 }
-

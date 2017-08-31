@@ -22,11 +22,18 @@ Scheduler.DatabaseAppointments = (function () {
         ref.remove();
     }
     
-    function updateDatabase(key, comment) {
+    function updateDatabase(key, comment, commentType) {
         var ref = firebase.database().ref("/" + APPOINTMENTS + "/" + key);
-        ref.update({
-            comment: comment
-        });
+        if (commentType === "general") {
+            ref.update({
+                commentGeneral: comment
+            });
+        } else {
+            ref.update({
+                commentTracked: comment
+            });
+        }
+        
     }
     
     function setDataToDatabase(date, timerange, lastname, firstname, email, topic) {
@@ -37,7 +44,8 @@ Scheduler.DatabaseAppointments = (function () {
             "firstname": firstname, /*!*/
             "email": email,
             "topic": topic,
-            "comment": ""
+            "commentGeneral": "",
+            "commentTracked": ""
         }).then(function(snapshot) {
             //location.reload();
         });

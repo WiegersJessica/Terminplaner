@@ -3,8 +3,10 @@ Scheduler.AppointmentOverview = (function () {
     "use strict";
     
     var that = {},
+        login,
         tableBody,
-        commentColumn,
+        commentGeneralColumn,
+        commentTrackedColumn,
         idCounter = 0,
         APPOINTMENTS = "Termine";
     
@@ -37,6 +39,7 @@ Scheduler.AppointmentOverview = (function () {
     
     //Kommentar: Klick auf das Icon (Häkchen)
     function iconAddEventListener(icon, commentField) {
+        var commentColumn;
         icon.addEventListener("click", function(event) {
             commentColumn = event.target.parentNode; /*Aktuelle Spalte über Parent holen*/
             commentColumn.innerHTML = commentField.value;
@@ -45,14 +48,13 @@ Scheduler.AppointmentOverview = (function () {
             icon.style.display = "none";
             
             //UPDATE DATABASE
-            /**/
-            Scheduler.DatabaseAppointments.updateDatabase(commentColumn.parentNode.getAttribute("row-key"), commentField.value);
+            Scheduler.DatabaseAppointments.updateDatabase(commentColumn.parentNode.getAttribute("row-key"), commentField.value, commentColumn.getAttribute("id"));
         });
     }
     
     //Kommentar (bereits verfasst)
-    function setupComment(appointment) {
-        commentColumn.innerHTML = appointment.comment;
+    function setupComment(commentColumn, comment) {
+        commentColumn.innerHTML = comment;
         commentColumn.addEventListener("click", commentColumnAddEventListener, false); /*Verfasster Kommentar soll klickbar sein --> Ändern*/
     }
     
@@ -74,7 +76,7 @@ Scheduler.AppointmentOverview = (function () {
     }
     
     //Kommentar
-    function setupAddComment() {
+    function setupAddComment(commentColumn) {
         var commentField, icon;
         commentField = setupTextarea();
         icon = setupIcon(commentField);
@@ -97,19 +99,37 @@ Scheduler.AppointmentOverview = (function () {
         return deleteColumn;
     }
     
-    //Kommentar
-    function setupCommentColumn(appointment) {
-        commentColumn = document.createElement("td");
-        commentColumn.classList.add("appointment-table-body");
-        commentColumn.classList.add("comment-column"); /*Zusätzlich notwendig für's Styling*/
+    /*Update*/
+    //Kommentar (nachverfolgend)
+    function setupCommentTrackedColumn(appointment) {
+        commentTrackedColumn = document.createElement("td");
+        commentTrackedColumn.classList.add("appointment-table-body");
+        commentTrackedColumn.classList.add("comment-column"); /*Zusätzlich notwendig für's Styling*/
+        commentTrackedColumn.setAttribute("id", "tracked");
         
-        if (appointment.comment === "") { //Noch kein Kommentar verfasst
-            setupAddComment(); 
+        if (appointment.commentTracked === "") { //Noch kein Kommentar verfasst
+            setupAddComment(commentTrackedColumn); 
         } else {
-            setupComment(appointment);
+            setupComment(commentTrackedColumn, appointment.commentTracked);
         }
         
-        return commentColumn;
+        return commentTrackedColumn;
+    }
+    
+    //Kommentar (allgemein)
+    function setupCommentGeneralColumn(appointment) {
+        commentGeneralColumn = document.createElement("td");
+        commentGeneralColumn.classList.add("appointment-table-body");
+        commentGeneralColumn.classList.add("comment-column"); /*Zusätzlich notwendig für's Styling*/
+        commentGeneralColumn.setAttribute("id", "general");
+        
+        if (appointment.commentGeneral === "") { //Noch kein Kommentar verfasst
+            setupAddComment(commentGeneralColumn); 
+        } else {
+            setupComment(commentGeneralColumn, appointment.commentGeneral);
+        }
+        
+        return commentGeneralColumn;
     }
     
     //E-Mail
@@ -161,10 +181,13 @@ Scheduler.AppointmentOverview = (function () {
         return dateColumn;
     }
     
+    /*Update*/
     function setupTableRow(childSnapshot) {
-        var key, appointment, tableRow, commentField,
-            dateColumn, timerangeColumn, topicColumn, lastnameColumn, firstnameColumn, emailColumn, commentColumn, deleteColumn;
+        var login, key, appointment, tableRow, commentField,
+            dateColumn, timerangeColumn, topicColumn, lastnameColumn, firstnameColumn, emailColumn, commentGeneralColumn, commentTrackedColumn,
+            deleteColumn;
         
+        login = Scheduler.Start.getLogin();
         key = childSnapshot.key();
         appointment = childSnapshot.val();
         
@@ -175,21 +198,30 @@ Scheduler.AppointmentOverview = (function () {
         
         dateColumn = setupDateColumn(appointment);
         timerangeColumn = setupTimerangeColumn(appointment);
-        topicColumn = setupTopicColumn(appointment);
-        lastnameColumn = setupLastnameColumn(appointment);
-        firstnameColumn = setupFirstnameColumn(appointment);
-        emailColumn = setupEmailColumn(appointment);
-        commentColumn = setupCommentColumn(appointment);
-        deleteColumn = setupDeleteColumn();
-        
         tableRow.appendChild(dateColumn);
         tableRow.appendChild(timerangeColumn);
-        tableRow.appendChild(topicColumn);
+        
+        if (login) {
+            topicColumn = setupTopicColumn(appointment);
+            tableRow.appendChild(topicColumn);
+        }
+        
+        lastnameColumn = setupLastnameColumn(appointment);
+        firstnameColumn = setupFirstnameColumn(appointment);
         tableRow.appendChild(lastnameColumn);
         tableRow.appendChild(firstnameColumn);
-        tableRow.appendChild(emailColumn);
-        tableRow.appendChild(commentColumn);
-        tableRow.appendChild(deleteColumn);
+        
+        if (login) {
+            emailColumn = setupEmailColumn(appointment);
+            commentGeneralColumn = setupCommentGeneralColumn(appointment);
+            commentTrackedColumn = setupCommentTrackedColumn(appointment);
+            deleteColumn = setupDeleteColumn();
+            
+            tableRow.appendChild(emailColumn);
+            tableRow.appendChild(commentGeneralColumn);
+            tableRow.appendChild(commentTrackedColumn);
+            tableRow.appendChild(deleteColumn);
+        }
         
         idCounter++;
         return tableRow;       
