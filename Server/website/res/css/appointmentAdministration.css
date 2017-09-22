@@ -1,0 +1,13 @@
+.appointment-administration-box_admin {
+    position: relative;
+    margin: auto;
+    width: 60%;
+}
+
+.appointment-administration-header {
+    text-align: center;
+}
+
+.appointment-administration {
+    margin-top: 40px;
+}
