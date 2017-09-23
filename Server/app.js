@@ -1,6 +1,7 @@
 (function(){
     var express = require("express");
     var path = require('path')
+    var mailer = require(__dirname + '/server-side-js/mailer')
     var server = express();
 
     server.use(function (req, res, next) {
@@ -25,6 +26,8 @@
     /* ends routes */
 
     server.listen(3333);
-    console.log("Server running at localhost on port 3333");   
+    console.log("Server running at localhost on port 3333");
+    mailer.init()
+    //mailer.sendMail('example@example.com', 'New test', 'New test text')   
     
 }());
