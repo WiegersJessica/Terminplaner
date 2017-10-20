@@ -27,14 +27,12 @@ Scheduler.DatabaseInquiries = (function () {
         });
     }
     
-    function setDataToDatabase(date, timerange, lastname, firstname, email, topic) {
+    //+Dringlichkeit
+    function setDataToDatabase(lastname, firstname, email) {
         db.push().set({
-            "date": date,
-            "timerange": timerange,
             "lastname": lastname,
             "firstname": firstname,
             "email": email,
-            "topic": topic,
             "comment": ""
         }).then(function(snapshot) {
             //location.reload();

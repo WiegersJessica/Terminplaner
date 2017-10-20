@@ -1,8 +1,19 @@
 /*GEHT NICHT*/
 #add-topic-button_admin, #add-appointment-button_admin {
-    margin-top: 100px;
+    margin-top: 50px;
+    margin-bottom: 20px;
 }
 
 .appointment-creation_admin {
     margin-top: 30px;
+}
+
+#period-start {
+    width: 51%;
+    float: left;
+}
+
+#period-end {
+    width: 51%;
+    float: right;
 }

@@ -36,7 +36,7 @@ Scheduler.DatabaseAppointments = (function () {
         
     }
     
-    function setDataToDatabase(date, timerange, lastname, firstname, email, topic) {
+    function setDataToDatabase(date, timerange, lastname, firstname, email, topic, duration) {
         db.push().set({
             "date": date,
             "timerange": timerange,
@@ -45,7 +45,8 @@ Scheduler.DatabaseAppointments = (function () {
             "email": email,
             "topic": topic,
             "commentGeneral": "",
-            "commentTracked": ""
+            "commentTracked": "",
+            "duration": duration
         }).then(function(snapshot) {
             //location.reload();
         });

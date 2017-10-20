@@ -12,3 +12,21 @@ h2 {
 #enter_code_button{
     margin-top: 5px;
 }
+
+#calendar td:hover {
+    cursor:pointer;
+}
+
+input {
+  font-family: monospace;
+}
+
+/*Input-Feld: Datum -> Hoch und Runter Pfeil weg!*/
+input[type=date]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    display: none;
+}
+
+/*.fc-button-group {
+    margin-top: 15px;
+}*/

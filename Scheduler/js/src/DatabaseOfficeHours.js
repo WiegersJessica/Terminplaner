@@ -10,12 +10,13 @@ Scheduler.DatabaseOfficeHours = (function () {
         return db;
     }
     
-    /*
-    function deleteAppointmentFromDatabase(key) {
-        var ref = firebase.database().ref("/" + APPOINTMENTS + "/" + key);
+    //ÜBERARBEITEN
+    function deleteOfficeHourFromDatabase(key) {
+        var ref = firebase.database().ref("/" + OFFICE_HOURS + "/" + key);
         ref.remove();
     }
     
+    /*
     function updateDatabase(key, comment, commentType) {
         var ref = firebase.database().ref("/" + APPOINTMENTS + "/" + key);
         if (commentType === "general") {
@@ -30,10 +31,11 @@ Scheduler.DatabaseOfficeHours = (function () {
         
     }*/
     
-    function setDataToDatabase(date, timerange) {
+    function setDataToDatabase(date, timeStart, timeEnd) {
         db.push().set({
             "date": date,
-            "timerange": timerange
+            "timestart": timeStart,
+            "timeend": timeEnd
         })
     }
     
@@ -43,7 +45,7 @@ Scheduler.DatabaseOfficeHours = (function () {
     
     that.init = init;
     that.setDataToDatabase = setDataToDatabase;
-    /*that.updateDatabase = updateDatabase;
-    that.deleteAppointmentFromDatabase = deleteAppointmentFromDatabase;*/
+    /*that.updateDatabase = updateDatabase;*/
+    that.deleteOfficeHourFromDatabase = deleteOfficeHourFromDatabase;
     return that;
 }());

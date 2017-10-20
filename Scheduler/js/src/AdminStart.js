@@ -20,8 +20,8 @@ Scheduler.AdminStart = (function () {
             creationButtonHeader.classList.remove("active");
             overviewButtonHeader.classList.remove("active");
             administrationButtonHeader.classList.add("active");
-            
-           // Scheduler.AppointmentOverview.init();
+            /**/
+            Scheduler.InquiryOverview.init();
         });
     }
     
@@ -70,8 +70,6 @@ Scheduler.AdminStart = (function () {
         administrationAppointmentContainer = document.querySelector(".appointment-administration-box_admin");
         administrationAppointmentContainer.style.display = "none";
     }
-    
-    
     
     function init() {
         console.log("user");

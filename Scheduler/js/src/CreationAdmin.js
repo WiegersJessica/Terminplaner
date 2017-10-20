@@ -2,23 +2,41 @@ var Scheduler = Scheduler || {};
 Scheduler.CreationAdmin = (function () {
     "use strict";
     
-    var that = {};
+    var that = {},
+        dateField,
+        timeStartField,
+        timeEndField;
 
-    function initAddOfficeHourButton(dateField, timerangeField) {
+    /*Externer Aufruf: CalendarAppointments.js*/
+    function setupDateField(date) {
+        dateField.value = date;
+        //timeStartField.value = timeStart;
+        //timeEndField.value = timeEnd;
+    }
+    
+    function initAddOfficeHourButton() {
         var addOfficeHourButton = document.querySelector("#add-appointment-button_admin");
         addOfficeHourButton.addEventListener("click", function() {
-            if (checkInputFields(dateField, timerangeField)) {
-                Scheduler.DatabaseOfficeHours.setDataToDatabase(dateField.value, timerangeField.value);
+            if (checkInputFields(dateField, timeStartField, timeEndField)) {
+                Scheduler.DatabaseOfficeHours.setDataToDatabase(dateField.value, timeStartField.value, timeEndField.value);
             }
         });
     }
     
     //Neuen Sprechstundentermin hinzufügen
     function initOfficeHourCreation() {
-        var dateField, timerangeField;
         dateField = document.querySelector("#date");
-        timerangeField = document.querySelector("#period");
-        initAddOfficeHourButton(dateField, timerangeField);
+        timeStartField = document.querySelector("#period-start");
+        timeEndField = document.querySelector("#period-end");
+        initAddOfficeHourButton();
+    }
+    
+    //Neuen Sprechstundengrund hinzufügen
+    function checkInputFields(fieldOne, fieldTwo, fieldThree) {
+        if (fieldOne.value === "" || fieldTwo.value === "" || fieldThree.value === "") {
+            return false;
+        }
+        return true;
     }
     
     //Neuen Sprechstundengrund hinzufügen
@@ -57,5 +75,6 @@ Scheduler.CreationAdmin = (function () {
     }
     
     that.init = init;
+    that.setupDateField = setupDateField;
     return that;
 }());

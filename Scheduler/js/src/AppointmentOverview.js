@@ -8,7 +8,134 @@ Scheduler.AppointmentOverview = (function () {
         commentGeneralColumn,
         commentTrackedColumn,
         idCounter = 0,
+        adminPlan = true,
         APPOINTMENTS = "Termine";
+    
+    function setupStudentPDFTable(doc) {
+        var source, buttons, txt, width;
+        $.each( $('#overview-table tr'), function (i, row){
+            $.each( $(row).find(".render-student"), function(j, cell){
+                txt = $(cell).text().trim() || " ";
+                width = (j === 0 || j === 1) ? 120 : 160; //1. und 2. Spalte schmaler
+                if (i === 0) { //Header der Tabelle
+                    doc.setFontSize(14); 
+                    doc.setFontType("bold");
+                    doc.cell(25, 80, width, 40, txt, i);
+                    //Wie kann man den Text mittig setzen?
+                } else {
+                    doc.margins = 1; //?
+                    doc.setFontSize(12);
+                    //doc.setFont("courier");
+                    doc.setFontType("bolditalic ");
+                    doc.cell(25, 80, width, 30, txt, i);
+                }
+            });
+        });
+    }
+    
+    function setupPDFHeader(doc) {
+        doc.text(50, 40, "Sprechstunden-Übersicht");
+        //Styling wird nicht übernommen!:
+        doc.setFontSize(30);
+        doc.setFontType("bold");
+        doc.cellInitialize(); //?
+    }
+    
+    function setupStudentPlanPDF() {
+        var doc = new jsPDF('p', 'pt', 'letter'); //l for landscape, p for portrait
+        setupPDFHeader(doc); //Überschrift
+        setupStudentPDFTable(doc); //Tabelle
+        doc.save('Türplan.pdf');
+    }
+    
+    function setupAdminPDFTable(doc) { //Spalten stylen
+        var source, buttons, txt, width;
+        $.each( $('#overview-table tr'), function (i, row){
+            $.each( $(row).find(".render"), function(j, cell){
+                txt = $(cell).text().trim() || " ";
+                width = (j === 0 || j === 1) ? 80 : 150; //1. und 2. Spalte schmaler
+                if (i === 0) { //Header der Tabelle
+                    doc.setFontSize(14); 
+                    doc.setFontType("bold");
+                    doc.cell(10, 80, width, 40, txt, i);
+                    //Wie kann man den Text mittig setzen?
+                } else {
+                    doc.margins = 1; //?
+                    doc.setFontSize(12);
+                    //doc.setFont("courier");
+                    doc.setFontType("bolditalic ");
+                    doc.cell(10, 80, width, 30, txt, i);
+                }
+            });
+        });
+    }
+    
+    function setupAdminPlanPDF() {
+        var doc = new jsPDF('l', 'pt', 'letter'); //l for landscape, p for portrait
+        setupPDFHeader(doc); //Überschrift
+        setupAdminPDFTable(doc); //Tabelle
+        doc.save('Übersicht.pdf');
+    }
+    
+    function setupButtonPDF() {
+        var pdfButton = document.querySelector("#pdf-button");
+        pdfButton.addEventListener("click", function() {
+            if (adminPlan) {
+                setupAdminPlanPDF();
+            } else {
+                setupStudentPlanPDF();
+            }
+        });
+    }
+    
+    //Überarbeiten
+    function planAdminButtonAddEventListener(planAdminButton) {
+        planAdminButton.addEventListener("click", function() {
+            login = true;
+            adminPlan = true;
+            clearTable();
+            setupTableHead();
+            setupAppointmentTable();
+        });
+    }
+    
+    //Überarbeiten
+    function planStudentButtonAddEventListener(planStudentButton) {
+        planStudentButton.addEventListener("click", function() {
+            login = false;
+            adminPlan = false;
+            clearTable();
+            setupTableHead();
+            setupAppointmentTable();
+            //Normal andere Tabelle holen
+        });
+    }
+    
+    function setupButtonsViews() {
+        var planStudentButton, planAdminButton;
+        planStudentButton = document.querySelector("#plan-student-button");
+        planAdminButton = document.querySelector("#plan-admin-button");
+        
+        planStudentButtonAddEventListener(planStudentButton);
+        planAdminButtonAddEventListener(planAdminButton);
+    }
+    
+    function setupButtonTimerange() {
+        var refreshButton = document.querySelector("#refresh-icon");
+        refreshButton.addEventListener("click", function() {
+            login = true;
+            clearTable();
+            setupAppointmentTable();
+            //DATUM übergeben: Start und Ende!
+        });
+    }
+    
+    //PDF
+    function setupTableButtons() {
+        //setupButtonTimerange();
+        setupButtonsViews();
+        setupButtonPDF();
+    }
     
     //Löschen: Klick auf das Löschen-Symbol
     function iconDeleteAddEventListener(iconDelete) {
@@ -136,6 +263,7 @@ Scheduler.AppointmentOverview = (function () {
     function setupEmailColumn(appointment) {
         var emailColumn = document.createElement("td");
         emailColumn.classList.add("appointment-table-body");
+        emailColumn.classList.add("render");
         emailColumn.innerHTML = appointment.email;
         return emailColumn;
     }
@@ -144,6 +272,8 @@ Scheduler.AppointmentOverview = (function () {
     function setupFirstnameColumn(appointment) {
         var firstnameColumn = document.createElement("td");
         firstnameColumn.classList.add("appointment-table-body");
+        firstnameColumn.classList.add("render");
+        firstnameColumn.classList.add("render-student");
         firstnameColumn.innerHTML = appointment.firstname;
         return firstnameColumn;
     }
@@ -152,6 +282,8 @@ Scheduler.AppointmentOverview = (function () {
     function setupLastnameColumn(appointment) {
         var lastnameColumn = document.createElement("td");
         lastnameColumn.classList.add("appointment-table-body");
+        lastnameColumn.classList.add("render");
+        lastnameColumn.classList.add("render-student");
         lastnameColumn.innerHTML = appointment.lastname;
         return lastnameColumn;
     }
@@ -160,6 +292,7 @@ Scheduler.AppointmentOverview = (function () {
     function setupTopicColumn(appointment) {
         var topicColumn = document.createElement("td");
         topicColumn.classList.add("appointment-table-body");
+        topicColumn.classList.add("render");
         topicColumn.innerHTML = appointment.topic;
         return topicColumn;
     }
@@ -168,14 +301,18 @@ Scheduler.AppointmentOverview = (function () {
     function setupTimerangeColumn(appointment) {
         var timerangeColumn = document.createElement("td");
         timerangeColumn.classList.add("appointment-table-body");
+        timerangeColumn.classList.add("render");
+        timerangeColumn.classList.add("render-student");
         timerangeColumn.innerHTML = appointment.timerange;
         return timerangeColumn;
     }
     
     //Datum
     function setupDateColumn(appointment) {
-        var dateColumn = document.createElement("th"); /*Hier th --> fett*/
+        var dateColumn = document.createElement("td"); /*Hier th --> fett*/
         dateColumn.classList.add("appointment-table-body");
+        dateColumn.classList.add("render");
+        dateColumn.classList.add("render-student");
         dateColumn.id = "appointment-date"; /*Notwendig für's Styling*/
         dateColumn.innerHTML = appointment.date;
         return dateColumn;
@@ -183,11 +320,10 @@ Scheduler.AppointmentOverview = (function () {
     
     /*Update*/
     function setupTableRow(childSnapshot) {
-        var login, key, appointment, tableRow, commentField,
+        var key, appointment, tableRow, commentField,
             dateColumn, timerangeColumn, topicColumn, lastnameColumn, firstnameColumn, emailColumn, commentGeneralColumn, commentTrackedColumn,
             deleteColumn;
         
-        login = Scheduler.Start.getLogin();
         key = childSnapshot.key();
         appointment = childSnapshot.val();
         
@@ -198,26 +334,23 @@ Scheduler.AppointmentOverview = (function () {
         
         dateColumn = setupDateColumn(appointment);
         timerangeColumn = setupTimerangeColumn(appointment);
-        tableRow.appendChild(dateColumn);
-        tableRow.appendChild(timerangeColumn);
-        
-        if (login) {
-            topicColumn = setupTopicColumn(appointment);
-            tableRow.appendChild(topicColumn);
-        }
-        
         lastnameColumn = setupLastnameColumn(appointment);
         firstnameColumn = setupFirstnameColumn(appointment);
+        
+        tableRow.appendChild(dateColumn);
+        tableRow.appendChild(timerangeColumn);
         tableRow.appendChild(lastnameColumn);
         tableRow.appendChild(firstnameColumn);
         
         if (login) {
             emailColumn = setupEmailColumn(appointment);
+            topicColumn = setupTopicColumn(appointment);
             commentGeneralColumn = setupCommentGeneralColumn(appointment);
             commentTrackedColumn = setupCommentTrackedColumn(appointment);
             deleteColumn = setupDeleteColumn();
             
             tableRow.appendChild(emailColumn);
+            tableRow.appendChild(topicColumn);
             tableRow.appendChild(commentGeneralColumn);
             tableRow.appendChild(commentTrackedColumn);
             tableRow.appendChild(deleteColumn);
@@ -239,6 +372,19 @@ Scheduler.AppointmentOverview = (function () {
         }); 
     }
     
+    function setupTableHead() {
+        var columns = document.querySelectorAll(".appointment-table-header");
+        columns.forEach(function(item) {
+            if (!login) {
+                if (item.getAttribute("key") === "admin-only") {
+                    item.classList.add("hidden");
+                }
+            } else {
+                item.classList.remove("hidden");
+            }
+        });
+    }
+    
     //Tabelle leeren
     function clearTable() {
         idCounter = 0;
@@ -248,11 +394,36 @@ Scheduler.AppointmentOverview = (function () {
         }
     }
     
+    function checkLogin() {
+        login = Scheduler.Start.getLogin();
+    }
+    
     function init() {
+        checkLogin();
         clearTable();
+        setupTableHead();
+        
+        //Hier Start- und Enddatum übergeben und alle Einträge aus diesem Bereich holen!
         setupAppointmentTable();
+        setupTableButtons();
     }
     
     that.init = init;
     return that;
 }());
+
+
+
+/*PDF:
+//Dieser Bereich soll nicht im PDF-Dokument angezeigt werden:
+buttons = {
+    '#button-container': function (element, renderer) {
+        return true;
+    },
+    '#header-delete': function (element, renderer) {
+        return true;
+    }
+};
+
+/*source = window.document.querySelector(".appointment-overview-box_admin");
+doc.fromHTML(source, 15, 15, {'elementHandlers': buttons });*/

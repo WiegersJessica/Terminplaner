@@ -5,34 +5,35 @@ Scheduler.CalendarAppointments = (function () {
     var that = {},
         OFFICE_HOURS = "Sprechstunden",
         deleteButton,
-        userRight;
+        userRight,
+        lastDate = $("#calendar");
     
-    
-    function setupOfficeHours() {
-    }
-    
-    //noch Sprechstundenzeiten aus der Datenbank holen
-    //nur Admin Berechtigung zu löschen evt. bei Klick löschen --> Alert wirklich löschen
     function setCalendarEntries(user){
         console.log("log" + user);
         userRight = user;
         $('#calendar').fullCalendar({
+            
             locale: 'de',
             firstDay: 1,
+            
+            businessHours: true, // emphasizes business hours
+            
+            editable: true, // event dragging & resizing!!!!!!!!! NUR ADMIN + ÄNDERUNGEN IN DER DATENBANK!!!!
+            
             //weekends: false, // will hide Saturdays and Sundays
             //defaultView: 'agenda', // or 'agenda' or 'basic'
-            /*dayClick: function(event) {
-                alert('a day has been clicked!');
-            },*/
-             header: {
-                 center: 'month,week,day' // buttons for switching between views
-             },
-             //timezone: 'local',
-             views: {
+            
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay,listWeek'
+            },
+            //timezone: 'local',
+            views: {
                 month: {
                     type: 'agenda',
                     buttonText: 'Monat',
-                    //hiddenDays: [ 0, 6 ]
+                     //hiddenDays: [ 0, 6 ]
                 },
                 week: {
                     type: 'agendaWeek',
@@ -40,14 +41,133 @@ Scheduler.CalendarAppointments = (function () {
                     //duration: { days: 7 },
                     buttonText: 'Woche',
                     //hiddenDays: [ 0, 6 ]
-                    },
+                },
                 day: {
                     type: 'agenda',
                     duration: { days: 1 },
                     buttonText: 'Tag'
+                },
+                listWeek: {
+                    buttonText: 'Übersicht'
                 }
             },
-            eventSources: [
+            
+            //?
+            businessHours: {
+                //days of week. an array of zero-based day of week integers (0=Sunday)
+                dow: [ 1, 2, 3, 4 ], // Monday - Thursday
+                start: '10:00', // a start time (10am in this example)
+                end: '18:00', // an end time (6pm in this example)
+            },
+            
+            //Klick auf einen Tag:
+            dayClick: function(date, event, view) {
+                var date, timerange; //Überarbeiten
+                date = date.format();
+                timerange = "";
+                console.log("Datum: " + date); //Datum
+                console.log("Ansicht: " + view.name); //Ansicht (Monat, Woche, Tag)
+                
+                if(userRight === "admin") {
+                    Scheduler.CreationAdmin.setupDateField(date);
+                } else {
+                    Scheduler.AppointmentCreation.setupDateAndTimerangeField(date, timerange);
+                }
+                
+                lastDate.css('background-color', 'white');
+                lastDate = $(this);
+                $(this).css('background-color', 'grey'); //Datum, das der Student auswählt, soll hervorgehoben werden!
+            },
+            
+            //Klick auf eine Sprechstunde:
+            eventClick: function(event, element) {
+                var date, time, timeStart, timeEnd, timerange;
+                date = event.start._i.split(" ")[0];
+                time = event.start._i.split(" ")[1];
+                timeStart = event.start._i.split(" ")[1].split(":")[0] + ":" + event.start._i.split(" ")[1].split(":")[1];
+                timeEnd = event.end._i.split(" ")[1].split(":")[0] + ":" + event.end._i.split(" ")[1].split(":")[1];
+                timerange = timeStart + "-" + timeEnd;
+                
+                if(userRight === "admin") { //Nur Admin kann Termin wieder löschen
+                    deleteBusinessHour(event);
+                } else {
+                    Scheduler.AppointmentCreation.setupDateAndTimerangeField(date, timerange);
+                }
+            },
+            
+            eventMouseover: function(event, element){
+                element.target.setAttribute ('style','cursor:default');
+                element.target.setAttribute ('title', event.title + "\n" +  "Beginn: " + timeStart  + " Uhr\n" + "Ende: " + timeEnd + " Uhr"); //Überarbeiten
+                element.target.style.backgroundColor = "grey";
+                //evt. cursor:url(path_to_file.cur)
+                if(userRight === "admin"){
+                    element.target.setAttribute ('style','cursor:pointer');
+                    //element.target.style.backgroundColor = "grey";
+                }
+            },
+        });
+        
+        
+        //Sprechstunden aus der Datenbank
+        //Uhrzeit noch anpassen
+        var ref, key, date, timeStart, timeEnd, appointment;
+        ref = new Firebase("https://terminplaner-ur.firebaseio.com/" + OFFICE_HOURS);
+        ref.once("value", function (snapshot) {
+            snapshot.forEach(function(childSnapshot) {
+                
+                key = childSnapshot.key();
+                appointment = childSnapshot.val();
+                date = appointment.date;
+                
+                //Überarbeiten
+                timeStart = appointment.timestart;
+                timeEnd = appointment.timeend;
+                console.log("Start " + timeStart);
+                console.log("Ende " + timeEnd);
+                
+                var officeHour = {
+                    title: "Sprechstunde",
+                    start: date + " " + timeStart,
+                    end: date + " " + timeEnd,
+                    allDay: false, // will make the time show: ???
+                    key: key
+                };
+                
+                $('#calendar').fullCalendar('renderEvent', officeHour, true);
+                //FARBE
+            });
+        });
+ 
+        
+    }
+    
+    function deleteBusinessHour(event) {
+        $('#deleteModal').modal("show");
+        deleteButton = document.getElementById("delete_Button");
+        deleteButton.addEventListener("click", function(){
+            $('#deleteModal').modal("hide");
+            $('#calendar').fullCalendar('removeEvents' , event._id);
+            Scheduler.DatabaseOfficeHours.deleteOfficeHourFromDatabase(event.key);
+        });
+    }
+    
+  
+    
+    function init() {
+        
+    }
+    
+    that.init = init;
+    that.setCalendarEntries = setCalendarEntries;
+    return that;
+}());
+
+
+
+/*
+Test-Sprechstunden:
+
+eventSources: [
                 // your event source
                 {
                     //setupOfficeHours();
@@ -74,75 +194,4 @@ Scheduler.CalendarAppointments = (function () {
                             textColor: 'white' // an option!
                     },
             ],
-            
-                        businessHours: {
-                            // days of week. an array of zero-based day of week integers (0=Sunday)
-                            dow: [ 1, 2, 3, 4 ], // Monday - Thursday
-
-                                start: '10:00', // a start time (10am in this example)
-                                end: '18:00', // an end time (6pm in this example)
-                            },
-            
-                    eventClick: function(event, element) {
-                        if(userRight == "admin"){
-                            deleteBusinessHour(event);
-                        }
-                        },
-            
-            eventMouseover: function(event, element){
-                console.log(element.target);
-                element.target.setAttribute ('style','cursor:default');
-                element.target.style.backgroundColor = "grey";
-                //evt. cursor:url(path_to_file.cur)
-                if(userRight == "admin"){
-                    element.target.setAttribute ('style','cursor:pointer');
-                //element.target.style.backgroundColor = "grey";
-                }
-                
-            },
-        });
-        
-        
-        //Sprechstunden aus der Datenbank
-        //Uhrzeit noch anpassen
-        var ref, date, timerange, appointment;
-        ref = new Firebase("https://terminplaner-ur.firebaseio.com/" + OFFICE_HOURS);
-        ref.once("value", function (snapshot) {
-            snapshot.forEach(function(childSnapshot) {
-                
-                appointment = childSnapshot.val();
-                date = appointment.date;
-                timerange = appointment.timerange;
-                
-                var officeHour = {
-                    title: "Sprechstunde",
-                    start: date + " 12:00:00",
-                    end: date + " 14:00:00"
-                };
-                
-                $('#calendar').fullCalendar('renderEvent', officeHour, true);
-                //FARBE
-            });
-       });
-    }
-    
-    function deleteBusinessHour(event){
-        $('#deleteModal').modal("show");
-        deleteButton = document.getElementById("delete_Button");
-        deleteButton.addEventListener("click", function(){
-            $('#deleteModal').modal("hide");
-            $('#calendar').fullCalendar('removeEvents' , event._id);
-            //delete Event from Database
-        });
-    }
-    
-  
-    
-    function init() {
-        
-    }
-    
-    that.init = init;
-    that.setCalendarEntries = setCalendarEntries;
-    return that;
-}());
+*/
