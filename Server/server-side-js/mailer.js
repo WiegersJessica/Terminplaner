@@ -5,7 +5,7 @@
 	var transporter = null;
 	var mailOptions = null;
 
-	function sendMail(to, subject, text){
+	function sendMail(to='', subject='', text=''){
 
 		if ( !(to && subject && text) ){
 			console.log('At least on parameter not set for content of mail')
