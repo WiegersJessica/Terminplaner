@@ -5,14 +5,22 @@
 	var transporter = null;
 	var mailOptions = null;
 
+	function sendNotification(to, key){
+		subject = 'Beantragen eines Termins'
+		text = 'Ihr Termin wurde beantragt.\n Um weitere Änderungen vorzunehmen benötigen sie folgenden Key: ' + key
+		sendMail(to, subject, text)
+	}
+
+	function sendInfo(to, text){
+		subject = 'Sprechstundenänderung'
+		sendMail(to, subject, text)
+	}
+
 	function sendMail(to, subject, text){
 
 		if ( !(to && subject && text) ){
 			console.log('At least on parameter not set for content of mail')
 			return
-		}
-		else if (to.includes('@example.com')){
-			console.log('Please change mailaddress in app.js')
 		}
 
 		mailOptions.to = to
@@ -46,7 +54,7 @@
 		mailOptions = { from: config.email.username };
 	}
 
-	module.exports.sendMail = sendMail
+	module.exports.sendNotification = sendNotification
 	module.exports.init = init
 
 }());

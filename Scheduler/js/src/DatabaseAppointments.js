@@ -28,7 +28,7 @@ Scheduler.DatabaseAppointments = (function () {
         germanDate = date.split("-")[2] + "." + date.split("-")[1] + "." + date.split("-")[0];
         messageText = "Liebe Studierende,\n\nDie Sprechstunde am " + germanDate + " um " + timerange + " muss leider entfallen.\nPrüfen Sie weitere Sprechstundentermine online.\n\nMit freundlichen Grüßen,\nProf. Dr. Wolff";
         emails.forEach(function(email) {
-            console.log(messageText);
+            $.post("send_info", { email: email, text: messageText });
             //SENDMAIL(email, messageText) !!! --> SERVER
         });
     }
@@ -110,12 +110,23 @@ Scheduler.DatabaseAppointments = (function () {
         var ref = new Firebase("https://terminplaner-ur.firebaseio.com/Termine");
         ref.limitToLast(1).once("child_added", function (snapshot) { /*In diesem Fall 2, weil danach noch users kommt*/
             lastKey = snapshot.key();
-            console.log("KEY SET: " + lastKey);
+            return lastKey;
+            /*console.log("KEY SET: " + lastKey);
               //!!!!!!!!!!!!!!!!!!!!gebe der mail den key mit !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             window.setTimeout(function() {
                 location.reload();
             }, 3000);
+            */
          });
+    }
+
+    function reload_site(){
+        console.log('ajax return success')
+        location.reload()
+    }
+
+    function sendNotificationMail(email, key){
+        $.post("send_notification", { email: email, key: key }, reload_site);
     }
     
     function setDataToDatabase(date, timerange, timerangeInit, lastname, firstname, email, topic, duration) {
@@ -131,8 +142,8 @@ Scheduler.DatabaseAppointments = (function () {
             "commentWolff": "", /**/
             "commentKlinger": "" /**/
         }).then(function(snapshot) {
-             setKey();
-            //location.reload();
+            key = setKey();
+            sendNotificationMail(email, key)
         });
     }
     
