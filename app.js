@@ -26,11 +26,14 @@
     server.get("/", function(req, res) {
         res.sendFile( website +'index.html', {root: __dirname})
     });
+    server.get("/admin/", function(req, res) {
+        res.sendFile( website +'admin.html', {root: __dirname})
+    });
     server.post('/send_notification', function(req, res){
         mailer.sendNotification(req.body.email, req.body.key)
         res.sendStatus(200)
     })
-    server.pst('/send_info', function(req, res){
+    server.post('/send_info', function(req, res){
         mailer.sendInfo(req.body.email, req.body.text)
         res.sendStatus(200)
     })

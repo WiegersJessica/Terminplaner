@@ -54,7 +54,8 @@
 		mailOptions = { from: config.email.username };
 	}
 
-	module.exports.sendNotification = sendNotification
-	module.exports.init = init
+	module.exports.sendNotification = sendNotification;
+	module.exports.sendInfo = sendInfo;
+	module.exports.init = init;
 
 }());
