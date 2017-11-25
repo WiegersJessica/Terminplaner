@@ -437,7 +437,9 @@ Scheduler.AppointmentCreation = (function () {
     function initAppointmentButton() {
         var appointmentButton, date, timerange, timerangeInit, lastname, firstname, email, topic, duration, code, key;
         appointmentButton = document.querySelector("#appointment-button");
-        appointmentButton.addEventListener("click", function() {
+        appointmentButton.addEventListener("click", function(e) {
+            e.preventDefault();
+            
             date = dateField.value;
             date = setupDate();
             timerange = timerangeField.value;

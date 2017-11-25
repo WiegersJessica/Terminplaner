@@ -6,8 +6,10 @@
 	var mailOptions = null;
 
 	function sendNotification(to, key){
+		console.log(to);
+		console.log(key);
 		subject = 'Beantragen eines Termins'
-		text = 'Ihr Termin wurde beantragt.\n Um weitere Änderungen vorzunehmen benötigen sie folgenden Key: ' + key
+		text = 'Ihr Termin wurde beantragt.\nUm weitere Änderungen vorzunehmen benötigen sie folgenden Key: ' + key
 		sendMail(to, subject, text)
 	}
 

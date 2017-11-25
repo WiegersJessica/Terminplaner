@@ -37,7 +37,13 @@ Scheduler.InquiryOverview = (function () {
             messageText = messageTextarea.value; //NACHRICHT, die geschickt werden soll!!!
             console.log(messageText);
             emails.forEach(function(email) { //in email ist die EMAIL!!!
-                $.post("send_info", { email: email, text: messageText });
+                $.ajax({
+                    url: 'send_info',
+                    type: "POST",
+                    data: JSON.stringify(data),
+                    contentType: "application/json",
+                    complete: reload_site
+                });
                 //SENDMAIL(email, messageText) !!! --> SERVER
             });
             //reload;

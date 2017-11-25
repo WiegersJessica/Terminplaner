@@ -28,7 +28,13 @@ Scheduler.DatabaseAppointments = (function () {
         germanDate = date.split("-")[2] + "." + date.split("-")[1] + "." + date.split("-")[0];
         messageText = "Liebe Studierende,\n\nDie Sprechstunde am " + germanDate + " um " + timerange + " muss leider entfallen.\nPrüfen Sie weitere Sprechstundentermine online.\n\nMit freundlichen Grüßen,\nProf. Dr. Wolff";
         emails.forEach(function(email) {
-            $.post("send_info", { email: email, text: messageText });
+            $.ajax({
+                url: 'send_info',
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                complete: reload_site
+            });
             //SENDMAIL(email, messageText) !!! --> SERVER
         });
     }
@@ -106,11 +112,11 @@ Scheduler.DatabaseAppointments = (function () {
     }
     
      /**/
-    function setKey() {
+    function setKey(email) {
         var ref = new Firebase("https://terminplaner-ur.firebaseio.com/Termine");
         ref.limitToLast(1).once("child_added", function (snapshot) { /*In diesem Fall 2, weil danach noch users kommt*/
             lastKey = snapshot.key();
-            return lastKey;
+            sendNotificationMail(email, lastKey);
             /*console.log("KEY SET: " + lastKey);
               //!!!!!!!!!!!!!!!!!!!!gebe der mail den key mit !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             window.setTimeout(function() {
@@ -122,11 +128,19 @@ Scheduler.DatabaseAppointments = (function () {
 
     function reload_site(){
         console.log('ajax return success')
-        location.reload()
+        //location.reload()
     }
 
     function sendNotificationMail(email, key){
-        $.post("send_notification", { email: email, key: key }, reload_site);
+        console.log('before ajax')
+        var data = { email: email, key: key}
+        $.ajax({
+                url: 'send_notification',
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                complete: reload_site
+        });
     }
     
     function setDataToDatabase(date, timerange, timerangeInit, lastname, firstname, email, topic, duration) {
@@ -142,8 +156,7 @@ Scheduler.DatabaseAppointments = (function () {
             "commentWolff": "", /**/
             "commentKlinger": "" /**/
         }).then(function(snapshot) {
-            key = setKey();
-            sendNotificationMail(email, key)
+            setKey(email);
         });
     }
     
