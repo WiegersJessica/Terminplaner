@@ -1,13 +1,17 @@
 .appointment-administration-box_admin {
     position: relative;
     margin: auto;
-    width: 60%;
+    width: 80%;
 }
 
-.appointment-administration-header {
-    text-align: center;
+.modal-delete { /*???*/
+    width: 90% !important;
+    margin-top: -20px;
+    color: white;
+    background-color: transparent;
 }
 
-.appointment-administration {
-    margin-top: 40px;
+#modal-delete-appointment {
+    background-color: rgba(255,255,255,0.1) !important; /* Black w/ opacity */
+   
 }

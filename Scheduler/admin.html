@@ -11,19 +11,20 @@
         <!--jQuery-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         
+        
         <!--Bootstrap-->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.7.0/jquery.matchHeight-min.js"></script>
         
         <!--CSS-Dateien-->
         <link rel="stylesheet" href="res/css/scheduler.css">
         <link rel="stylesheet" href="res/css/fullcalendar.min.css">
         <link rel="stylesheet" href="res/css/appointmentCreation.css">
         <link rel="stylesheet" href="res/css/appointmentOverview.css">
-        <!---->
         <link rel="stylesheet" href="res/css/appointmentAdministration.css">
-        <!---->
         <link rel="stylesheet" href="res/css/inquiryOverview.css">
         <link rel="stylesheet" href="res/css/scrolling.css">
         <link rel="stylesheet" href="res/css/main.css">
@@ -32,7 +33,11 @@
         <link rel="stylesheet" href="res/css/admin.css">
         <link rel="stylesheet" href="res/css/calendar.css">
         
-        <link href='http://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
+        <!--Schriftarten-->
+        <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Bitter' type='text/css'>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Grand+Hotel" type='text/css'>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:100,300" type='text/css'>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Space+Mono" type='text/css'>   
         
         <!--FÜR DATEPICKER-->
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -50,37 +55,29 @@
     </head>
     
     <body>
-        
-        
-        <!--<p>Date: <input type="text" id="datepicker"></p>-->
-        
         <div class="container">
             <div class="row">
                 <div class='col-sm-6'>
                     
                 </div>
-
             </div>
         </div>
         
-        
-        
+        <!--Login-->
         <div id="login_window" class="col-md-4 hidden container" style="float:initial">
-            
             <h2 class="form-signin-heading">Login</h2>
             <form class="form-signin">
                 <label for="inputEmail" class="sr-only">E-Mail Adresse</label>
                 <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
                 <label for="inputPassword" class="sr-only">Passwort</label>
                 <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-                <button id="sign_in_button" class="btn btn-lg btn-primary btn-block" type="button">Anmelden</button>
+                <button id="sign_in_button" type="button">Anmelden</button>
                 <div id="password-wrong" class="alert alert-danger hidden" role="alert">
                     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                     <span class="sr-only">Fehler:</span>
-                     Falscher Benutzername oder Passwort
+                    &nbsp;&nbsp;Falscher Benutzername oder falsches Passwort!
                 </div>
             </form>
-
         </div>
         
         <div id="admin_window" class="hidden">
@@ -100,23 +97,30 @@
         <div class="row">
             <div class="appointment-creation-box_admin">
                 <div class="col-md-4 appointment-creation-container form-style">
+                    <h2 class="title">Terminverwaltung</h2> <!---->
+                    
+                    <div class="inner-wrap inner-wrap-free-appointments" style="display:none">
+                        <div class="form-group overview-container">
+                            <canvas id="chart-admin" width="320" height="320"></canvas>
+                        </div>
+                    </div>
                     
                     <!--Sprechstundengrund hinzufügen-->
                     <form class="appointment-creation-form form-inline topic-creation_admin">
                         <div class="section">
-                            <div class="section-header"><span>1</span>Sprechstundengrund und Dauer</div>
+                            <div class="section-header section-header-admin">Sprechstundengrund und Dauer</div>
                             <div class="inner-wrap">
                                 <div class="col-md-6 form-group topic-container">
-                                    <label for="topic">Sprechstundengrund</label>
-                                    <input type="text" list="topics" id="topic-list" placeholder="Thema" style="height: 34px;" required>                                             <!--Auswahlliste-->
+                                    <!--<label for="topic">Sprechstundengrund</label>-->
+                                    <input type="text" list="topics" id="topic-list" placeholder="Thema" style="height: 34px;" required>
                                         <datalist id="topics">
                                             <!--Javascript-->
                                         </datalist>
                                     </input>
                                 </div>
                                 <div class="col-md-6 form-group duration-container">
-                                    <label for="duration">Dauer (Min)</label>
-                                    <input type="number" class="form-control" id="duration" placeholder="Dauer" min="5" required>
+                                    <!--<label for="duration">Dauer (Min)</label>-->
+                                    <input type="number" class="form-control" id="duration" placeholder="Dauer" min="5" max="10" step="5" required>
                                 </div>
                                 <div class="button-section">
                                     <input type="submit" id="add-topic-button_admin" value="Grund hinzufügen" /> <!--submit-->
@@ -125,66 +129,94 @@
                         </div>
                     </form>
                 
-                
                     <!--Sprechstundentermin hinzufügen-->
                     <form class="appointment-creation-form form-inline appointment-creation_admin">
                         <div class="section">
-                            <div class="section-header"><span>2</span>Datum und Zeitspanne</div>
+                            <div class="section-header section-header-admin">Sprechstunde - Datum und Zeitspanne</div>
                             <div class="inner-wrap">
                                 <div class="col-md-6 form-group date-container">
-                                    <label for="date">Datum</label>
-                                    <input type="date" class="form-control" id="date" placeholder="Datum" required>
+                                    <!--<label for="date">Datum</label>-->
+                                    <input type="text" class="form-control" id="date" placeholder="Datum" readonly required/>
                                 </div>
                                 <div class="col-md-6 form-group timerange-container">
-                                    <label for="period">Zeitspanne</label>
-                                    <input type="time" class="form-control" id="period-start" placeholder="Von" required>
-                                    <input type="time" class="form-control" id="period-end" placeholder="Bis" required>
+                                    <!--<label for="period">Zeitspanne</label>-->
+                                    <input type="time" class="form-control" id="period-start" placeholder="Von">
+                                    <input type="time" class="form-control" id="period-end" placeholder="Bis" readonly>
+                                </div> 
+                                
+                                <div id="minutesWrong" class="alert alert-danger hidden" role="alert">
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                    <span class="sr-only">Fehler:</span>
+                                    &nbsp;&nbsp;Ungültige Zeitangabe: Die Minuten können nur auf 0 oder 5 enden!
+                                </div>
+
+                                <div id="empty-date-field" class="alert alert-danger hidden" role="alert">
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                    <span class="sr-only">Fehler:</span>
+                                    &nbsp;&nbsp;Bitte geben Sie ein Datum ein!
                                 </div>
                                 
                                 <div class="button-section">
-                                    <input type="submit" id="add-appointment-button_admin" value="Termin eintragen" />
+                                    <input type="submit" id="add-appointment-button_admin" value="Termin hinzufügen" />
                                 </div>
                             </div>
+                            
                         </div>
+                        
                     </form>
                 
                 </div>
                 <div class="col-md-8 calendar-container">
                     <div id="calendar"></div>
                 </div>
-            </div>
-        </div>
-        
-        <div id = "deleteModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="meinKleinesModalLabel">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">Soll die Sprechstunde wirklich gelöscht werden?</h5>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Nein</button>
-                        <button id="delete_Button" type="button" class="btn btn-primary">Ja</button>
-                    </div>
+            
+            <div id="saveModal" class="modal">
+                  <!-- Modal content -->
+                  <div class="modal-content">
+                    <p>Die Sprechstunde wird hinzugefügt...</p>
+                  </div>
+
                 </div>
             </div>
         </div>
-    
+        
+        <!--Modal: Sprechstunde löschen-->
+        <div id ="modal-delete-appointment" class="modal fade" role="dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Soll diese Sprechstunde gelöscht werden?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button id="delete-button-no" type="button" class="btn btn-default" data-dismiss="modal">Nein</button>
+                    <button id="delete-button" type="button" class="btn btn-primary" data-dismiss="modal">Ja</button>
+                </div>
+            </div>
+        </div>
+        
+        <!--Modal: Sprechstunde einer Person löschen-->
+        <div id ="modal-delete-person" class="modal fade" role="dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Soll diese Sprechstunde wirklich gelöscht werden?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button id="delete-button-no-modal-person" type="button" class="btn btn-default" data-dismiss="modal">Nein</button>
+                    <button id="delete-button-modal-person" type="button" class="btn btn-primary" data-dismiss="modal">Ja</button>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        
+        <!--TERMINÜBERSICHT-->
+        
         <div class="appointment-overview-box_admin">
             <h2 class="appointment-overview-header">Sprechstunden-Übersicht</h2>
-            
-            
-            
-            
-            
-            
-            <!--Sprechstunden-Übersicht-->
-            
-            
-            <!---->
+
             <div id="button-container">
-                
                 <div class="left">
-                    <input type="text" class="search-button" id="appointment-search-button" onkeyup="filter(3, 'overview-table', 'appointment-search-button')" placeholder="Suche..">
+                    <input type="text" class="search-button" id="appointment-search-button" onkeyup="filter(2, 'overview-table', 'appointment-search-button')" placeholder="Nachname">
 
                     <div id="button-date-box">
                         <input type="text" class="form-control" id="datepicker-from" placeholder="Von.." />
@@ -194,73 +226,81 @@
                     </div>
                 </div>
                 
-                
                 <div class="right">
                     <div id="button-views-box">
-                        <input type="button" id="plan-student-button" value="TP" />
-                        <input type="button" id="plan-admin-button" value="AP" />
-                        <input type="button" id="comment-admin-button" value="KT" />
+                        <input type="button" id="plan-student-button" title="Türplan" value="TP" />
+                        <input type="button" id="plan-admin-button" title="Adminplan" value="AP" />
+                        <input type="button" id="comment-admin-button" title="Kommentarplan" value="KT" />
                     </div>
                     <div id="button-pdf-box">
-                        <input type="button" id="pdf-button" value="PDF" />
+                        <span class="glyphicon glyphicon-save" id="pdf-button" aria-hidden="true" title="PDF generieren"></span>
                     </div>
                 </div>
-
-                
             </div>
             
-            
-            
-            
-            
-            
-            
-            
-            
-            <!---->
-            <table class="appointment-overview-table" id="overview-table" align="center" border="1px" width="100%" height="25%" cellspacing="1" cellpadding="2">
+            <!--Tabelle: Übersicht alle Termine (Student und Admin)-->
+            <table class="appointment-overview-table" id="overview-table" align="center" width="100%" height="25%" cellspacing="1" cellpadding="2">
                 <caption align="bottom">Sprechstunden</caption>
                 <thead class="table-head">
                     <tr>
-                        <th class="appointment-table-header render render-student" id="header-date" key="admin-student" onclick="sortTable(0, 'overview-table')" title="Sortieren">Datum</th>
-                        <th class="appointment-table-header render render-student" id="header-timerange" key="admin-student" onclick="sortTable(1, 'overview-table')" title="Sortieren">Uhrzeit</th>
-                        <th class="appointment-table-header render render-student" id="header-lastname" key="admin-student" onclick="sortTable(2, 'overview-table')" title="Sortieren">Nachname</th>
-                        <th class="appointment-table-header render render-student" id="header-firstname" key="admin-student" onclick="sortTable(3, 'overview-table')" title="Sortieren">Vorname</th>
-                        <th class="appointment-table-header render" id="header-email" key="admin-only" onclick="sortTable(4, 'overview-table')" title="Sortieren">E-Mail</th>
-                        <th class="appointment-table-header render" id="header-topic" key="admin-only" onclick="sortTable(5, 'overview-table')" title="Sortieren">Sprechstundengrund</th>
-                        <th class="appointment-table-header" id="header-comment" key="admin-only">Allgemeiner Kommentar</th> <!--Für den Admin-->
-                        <th class="appointment-table-header" id="header-comment" key="admin-only">Wichtiger Kommentar</th> <!--Für den Admin-->
-                        <th class="appointment-table-header" id="header-delete" key="admin-only">Löschen</th> <!--Für den Admin-->
+                        <th class="table-header render render-student" id="header-date" key="admin-student" onclick="sortTable(0, 'overview-table')" title="Sortieren">Datum</th>
+                        <th class="table-header render render-student" id="header-timerange" key="admin-student" onclick="sortTable(1, 'overview-table')" title="Sortieren">Uhrzeit</th>
+                        <th class="table-header render render-student" id="header-lastname" key="admin-student" onclick="sortTable(2, 'overview-table')" title="Sortieren">Nachname</th>
+                        <th class="table-header render render-student" id="header-firstname" key="admin-student" onclick="sortTable(3, 'overview-table')" title="Sortieren">Vorname</th>
+                        <th class="table-header render" id="header-email" key="admin-only" onclick="sortTable(4, 'overview-table')" title="Sortieren">E-Mail</th>
+                        <th class="table-header render" id="header-topic" key="admin-only" onclick="sortTable(5, 'overview-table')" title="Sortieren">Sprechstundengrund</th>
+                        
+                        <th class="table-header" id="header-delete" key="admin-only">Löschen</th> <!--Für den Admin-->
                     </tr>
                 </thead>
                 <tbody id="table-body">
                     <!--AppointmentOverview.js-->
                 </tbody>
             </table>
+            
+            
+            <!--Tabelle: Kommentare-->
+            <table class="appointment-comment-table" id="comment-table" align="center" border="1px" width="80%" height="25%" cellspacing="1" cellpadding="2" style="display:none">
+                <caption align="bottom">Sprechstunden</caption>
+                <tbody id="comment-table-body">
+                    <!--AppointmentOverview.js-->
+                </tbody>
+            </table>
+            
+            <div class="no-appointment-box">
+                <h4 class="no-appointment">Für diesen Zeitraum sind keine Sprechstundentermine eingetragen</h4>
+            </div>
         </div>
         
         
         
-        <!--Offene Anfragen-->
+        <!--OFFENE ANFRAGEN-->
+        
         <div class="appointment-administration-box_admin">
             <h2 class="appointment-administration-header">Offene Anfragen</h2>
-            
-            <!---->
+    
             <div id="button-container">
-                <input type="text" class="search-button" id="inquiry-search-button" onkeyup="filter(0, 'inquiry-table', 'inquiry-search-button')" placeholder="Suche.."> 
+                <div class="left">
+                    <input type="text" class="search-button" id="inquiry-search-button" onkeyup="filter(1, 'inquiry-table', 'inquiry-search-button')" placeholder="Nachname">
+                </div>
+                
+                <div class="right">
+                    <button type="button" id="delete-all-button">
+                        <span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;&nbsp;Anfragen
+                    </button>
+                </div>
             </div>
             
-            <!---->
-            <table class="inquiry-overview-table" id="inquiry-table" align="center" border="1px" width="100%" height="25%" cellspacing="1" cellpadding="2">
+            <table class="inquiry-overview-table" id="inquiry-table" align="center" width="100%" height="25%" cellspacing="1" cellpadding="2">
                 <caption align="bottom">Offene Anfragen</caption>
                 <thead class="table-head">
                     <tr>
-                        <th class="header-admin appointment-table-header" id="header-lastname" onclick="sortTable(0, 'inquiry-table')" title="Sortieren">Nachname</th>
-                        <th class="header-admin appointment-table-header" id="header-firstname" onclick="sortTable(1, 'inquiry-table')" title="Sortieren">Vorname</th>
-                        <th class="header-admin appointment-table-header" id="header-email" onclick="sortTable(2, 'inquiry-table')" title="Sortieren">E-Mail</th>
-                        <!--Dringlichkeit-->
-                        <th class="appointment-table-header" id="header-comment">Kommentar</th> <!--Für den Admin-->
-                        <th class="appointment-table-header" id="header-delete">Löschen</th> <!--Für den Admin-->
+                        <th class="table-header header-admin render" id="header-date" onclick="sortTable(0, 'inquiry-table')" title="Sortieren">Datum</th>
+                        <th class="table-header header-admin render" id="header-lastname" onclick="sortTable(1, 'inquiry-table')" title="Sortieren">Nachname</th>
+                        <th class="table-header header-admin render" id="header-firstname" onclick="sortTable(2, 'inquiry-table')" title="Sortieren">Vorname</th>
+                        <th class="table-header header-admin render" id="header-email" onclick="sortTable(3, 'inquiry-table')" title="Sortieren">E-Mail</th>
+                        <th class="table-header" id="header-comment">Kommentar</th> <!--Für den Admin-->
+                        <th class="table-header" id="header-delete">Löschen</th> <!--Für den Admin-->
                     </tr>
                 </thead>
                 <tbody id="table-body-inquiries">
@@ -269,17 +309,15 @@
             </table>
             
             <div class="button-section">
-                <input type="button" id="send-email-button_admin" value="Benachrichtigung senden" data-toggle="modal" data-target="#messageModal" />
+                <input type="button" id="notification-button" value="Benachrichtigung" data-toggle="modal" data-target="#messageModal" />
             </div>
-        </div>
         
         
-        <!---->
-        <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
+            <!--Modal: Benachrichtigung an offene Anfragen-->
+            <div id="messageModal" class="modal fade" role="dialog">
+                <div class="modal-content modal-inquiry">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <button type="button" class="close" id="close-message" aria-label="Close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="myModalLabel">Benachrichtigung senden</h4>
                     </div>
                     <div class="modal-body">
@@ -290,18 +328,32 @@
                             </ul>
                         </div>
                         <div class="modal-message-box">
-                            <label for="modal-message-input" id="modal-message-label">Nachricht</label><br>
-                            <!---->
-                            <input type="date" required="required">
-                            <textarea id="modal-message-input" type="text" placeholder="Nachricht" cols="20" rows="5"></textarea>
+                            <label id="modal-message-label" for="modal-message-input">Nachricht</label><br>
+                            <!--<input type="date" required="required">-->
+                            <textarea id="modal-message-input" type="text" placeholder="Nachricht" cols="20" rows="7">Liebe Studierende,&#13;&#10;&#13;&#10;Es wurde eine neue Sprechstunde bereitgestellt.&#13;&#10;Sie können sich ab sofort online dafür eintragen.&#13;&#10;&#13;&#10;Mit freundlichen Grüßen,&#13;&#10;Prof. Dr. Wolff</textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" id="modal-button-message-send">Benachrichtigung abschicken</button>
+                        <button type="button" class="btn btn-default" id="modal-button-message-send" data-dismiss="modal">Benachrichtigung abschicken</button>
                     </div>
                 </div>
             </div>
+        
+            <!--Modal: Anfrage löschen-->
+            <div id="modal-delete-inquiry" class="modal fade" role="dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel">Soll diese Anfrage wirklich gelöscht werden?</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="modal-button-inquiry-delete-not" type="button" class="btn btn-default" data-dismiss="modal">Nein</button>
+                        <button id="modal-button-inquiry-delete" type="button" class="btn btn-primary" data-dismiss="modal">Ja</button>
+                    </div>
+                </div>
+            </div>
+            
         </div>
+    </div>
         
         <script src="/js/src/Login.js" type="text/javascript"></script>
         <script src="/js/src/Start.js" type="text/javascript"></script>
@@ -309,21 +361,18 @@
         <script src="/js/src/CalendarAppointments.js" type="text/javascript"></script>
         <script src="/js/src/AppointmentCreation.js" type="text/javascript"></script>
         <script src="/js/src/AppointmentOverview.js" type="text/javascript"></script>
-        <!---->
         <script src="/js/src/InquiryOverview.js" type="text/javascript"></script>
-        
         <script src="/js/src/CreationAdmin.js" type="text/javascript"></script>
-        
         <script src="/js/src/DatabaseAppointments.js" type="text/javascript"></script>
         <script src="/js/src/DatabaseInquiries.js" type="text/javascript"></script>
         <script src="/js/src/DatabaseTopics.js" type="text/javascript"></script>
         <script src="/js/src/DatabaseOfficeHours.js" type="text/javascript"></script>
-        
         <!--<script src="js/libs/jquery.min.js"></script>-->
         <script src="js/libs/moment.min.js"></script>
         <script src="js/libs/fullcalendar.min.js"></script>
         <script src='js/locale/de.js'></script>
         <script src="js/src/bootstrap.js"></script>
+        <script src="js/src/Chart.js"></script>
     
         <!--FIREBASE Datenbank-->
         <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
@@ -340,8 +389,7 @@
           firebase.initializeApp(config);
         </script>
         
-        </div>
-    
+       
     </body>
     <script>
         $(document).ready(function() {
@@ -372,11 +420,10 @@
         }
     </script>
 
-
     <!--Tabelle sortieren-->
     <script>
         function sortTable(n, tableID) {
-            var clickedElement, table, rows, header, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            var clickedElement, table, rows, header, switching, i, x, y, timeX, timeY, shouldSwitch, dir, switchcount = 0;
             table = document.getElementById(tableID);
             switching = true;
             dir = "asc"; //Set the sorting direction to ascending
@@ -385,7 +432,7 @@
                 switching = false;
                 rows = table.getElementsByTagName("tr");
                 header = rows[0].getElementsByTagName("th");
-                for (i = 0; i < (header.length - 1); i++) { /**/
+                for (i = 0; i < (header.length - 1); i++) {
                     header[i].classList.remove("active");
                 }
                 
@@ -403,11 +450,32 @@
                       if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
                           shouldSwitch= true;
                           break;
+                          /**/
+                      } else if (x.innerHTML.toLowerCase() === y.innerHTML.toLowerCase()) {
+                          if (n === 0) {
+                              timeX = rows[i].getElementsByTagName("td")[1];
+                              timeY = rows[i + 1].getElementsByTagName("td")[1];
+                              if (timeX.innerHTML.toLowerCase() > timeY.innerHTML.toLowerCase()) {
+                                  shouldSwitch = true;
+                                  break;
+                              }
+                          }
                       }
+                      
                   } else if (dir === "desc") {
                       if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
                           shouldSwitch= true;
                           break;
+                          /**/
+                      } else if (x.innerHTML.toLowerCase() === y.innerHTML.toLowerCase()) {
+                          if (n === 0) {
+                              timeX = rows[i].getElementsByTagName("td")[1];
+                              timeY = rows[i + 1].getElementsByTagName("td")[1];
+                              if (timeX.innerHTML.toLowerCase() > timeY.innerHTML.toLowerCase()) {
+                                  shouldSwitch = true;
+                                  break;
+                              }
+                          }
                       }
                   }
                 }
@@ -426,6 +494,5 @@
             }
         }
     </script>
-
 
 </html>

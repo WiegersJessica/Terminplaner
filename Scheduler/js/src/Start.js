@@ -30,7 +30,7 @@ Scheduler.Start = (function () {
             overviewButtonHeader.classList.remove("active");
             administrationButtonHeader.classList.add("active");
             
-           // Scheduler.AppointmentOverview.init();
+            Scheduler.AppointmentDeletion.init();
         });
     }
     
@@ -89,9 +89,9 @@ Scheduler.Start = (function () {
         initHeader();
         Scheduler.AppointmentCreation.init(); //Ansicht Terminerstellung ist zu Beginn aktiv
         Scheduler.DatabaseAppointments.init();
-        /**/
         Scheduler.DatabaseInquiries.init();
         Scheduler.CalendarAppointments.setCalendarEntries("user");
+        Scheduler.AppointmentOverview.setupTableButtonsStudent();
     }
     
     that.init = init;

@@ -1,3 +1,86 @@
+#calendar {
+    margin-top: 10px;
+    margin-left: -22px; /**/
+    margin-bottom: 10px;
+}
+
+/**/
+.fc-view-container, .fc-header-toolbar {
+    width: 99%;
+}
+
 .fc-center {
+    color: grey;
+}
+
+.fc-day-header, .fc-button-group {
+    font-family:'Raleway';
+    /*font-family:'Robot';
+    font-family:'Bitter';*/
+    color: grey;
+}
+
+.fc-day-header {
+    font-size: 15px;
+}
+
+.fc-button-group {
+    font-size: 14px;
+}
+
+.fc-month-button, .fc-agendaWeek-button, .fc-agendaDay-button, .fc-listWeek-button {
+    padding: 2px !important;
+    width: 80px;
+}
+
+.fc-content span {
+    display: block;
+}
+
+.fc-more-popover {
+    overflow-y: scroll;
+    max-height: 31%;
+    max-width: 100%;
+}
+
+.fc-week-number {
+    width: 30px;
+    color: grey;
+}
+
+.fc-week-number {
+    font-size: 12px;
+}
+
+.fc-today-button {
+    background-color: #fce3e7;
+}
+
+
+
+/*Datepicker*/
+.ui-datepicker-title, th span {
+    font-family: 'Raleway';
+    color: grey;
+}
+
+.ui-datepicker-title {
+    font-size: 16px;
+}
+
+/*Active*/
+.ui-state-active {
+    background-color: grey !important;
+    border: none !important;
+}
+
+/*Heute*/
+.ui-state-highlight {
+    background-color: #fce3e7 !important;
+    border: none !important;
+}
+
+/*Klappt so nicht*/
+.ui-icon {
     color: grey;
 }

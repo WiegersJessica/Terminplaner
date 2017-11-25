@@ -4,5 +4,24 @@
 }
 
 .form-signin {
-    margin-top: 40px;
+    width: 428px;
+    margin: 40px auto;
+}
+
+#sign_in_button {
+    width: 428px;
+    margin-top: 5px;
+    padding: 10px;
+    font-size: 17px;
+    font-family: 'Raleway';
+    border-radius: 4px;
+}
+
+#sign_in_button:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+#sign_in_button:focus {
+    outline: 0;
 }

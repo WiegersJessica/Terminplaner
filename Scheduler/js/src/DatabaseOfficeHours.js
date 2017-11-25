@@ -12,8 +12,18 @@ Scheduler.DatabaseOfficeHours = (function () {
     
     //ÜBERARBEITEN
     function deleteOfficeHourFromDatabase(key) {
-        var ref = firebase.database().ref("/" + OFFICE_HOURS + "/" + key);
-        ref.remove();
+        console.log("delete");
+        var ref, appointment, date, timestart, timeend, timerange;
+        ref = firebase.database().ref("/" + OFFICE_HOURS + "/" + key);
+        ref.once("value", function (snapshot) {
+            appointment = snapshot.val();
+            date = appointment.date;
+            timestart = appointment.timestart;
+            timeend = appointment.timeend;
+            timerange = timestart + "-" + timeend;
+            Scheduler.DatabaseAppointments.deleteAppointmentsFromDatabase(date, timerange); //Sprechstundentermine auch aus DB löschen!
+            ref.remove();
+        });
     }
     
     /*
@@ -36,7 +46,11 @@ Scheduler.DatabaseOfficeHours = (function () {
             "date": date,
             "timestart": timeStart,
             "timeend": timeEnd
-        })
+        }).then(function(snapshot) {
+              window.setTimeout(function() {
+                location.reload();
+            }, 3000);
+        });
     }
     
     function init() {

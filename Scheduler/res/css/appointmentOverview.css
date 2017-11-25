@@ -1,26 +1,82 @@
 .appointment-overview-box_admin {
     position: relative;
     margin: auto;
-    width: 96%;
+    width: 90%;
 }
 
 .appointment-overview-header, .appointment-administration-header {
     text-align: center;
 }
 
-/**/
+.appointment-overview-header-timerange {
+    width: 80%;
+    margin: auto;
+}
+
 .appointment-overview-table, .inquiry-overview-table {
+    margin-top: -25px;
+    margin-bottom: 30px;
+    border-left: 0px solid;
+    border-right: 0px solid;
+}
+
+#comment-table, .render-comment {
+    border: 1px solid grey !important;
+}
+
+caption {
     margin-top: 10px;
+    font-size: 16px;
+    font-family: 'Raleway';
 }
 
-.appointment-table-header, .appointment-table-body {
+.no-appointment-box {
+    width: 100%;
+    margin-top: 50px;
     text-align: center;
+    font-family: 'Raleway';
 }
 
-.appointment-table-header {
+.no-appointment {
+    color: grey;
+}
+
+.table-header, .appointment-table-body {
+    text-align: center;
+    font-family: 'Raleway';
+    width: 140px;
+}
+
+.table-header {
     height: 50px;
     /*background-color: #f3fafc;*/
+    font-size: 18px;
     background-color: #F8F8F8;
+    color: grey;
+    
+    border-bottom: 2px solid #F0F0F0;
+    border-left: 0px solid;
+    border-right: 0px solid;
+    border-top: 0px solid !important;
+}
+
+.appointment-table-body {
+    font-size: 16px;
+    border: 1px solid #F0F0F0;
+    border-left: 0px solid;
+    border-right: 0px solid;
+}
+
+.table-admin {
+    width: 100%;
+}
+
+.table-student {
+    width: 80%;
+}
+
+#door-plan {
+    margin-top: 10px;
 }
 
 .render:hover {
@@ -28,12 +84,28 @@
 }
 
 .appointment-table-body {
-    height: 40px;
+    height: 80px;
+}
+
+.comment-table-column-left {
+    width: 70%;
+    height: 170px;
+}
+
+.comment-table-column-right {
+    width: 30%;
+    height: 170px;
+}
+
+.comment-table-header {
+    background-color: #F8F8F8;
 }
 
 #appointment-date {
     background-color: #F8F8F8;
+    font-size: 17px;
     font-weight: bold;
+    color: grey;
 }
 
 th {
@@ -46,38 +118,71 @@ caption {
     text-align: center;
 }
 
+.comment-column {
+    max-width: 120px;
+    word-wrap: break-word;
+}
+
 .comment-column:hover {
     opacity: 0.8;
     cursor: pointer;
 }
 
+.comment-text {
+    padding: 10px;
+}
+
 .comment-textarea {
     float: left;
     width: 86%;
-    padding: 5px;
+    height: 100%;
+    padding: 10px;
     opacity: 0.8;
-    font-size: 12px;
+    font-size: 15px;
+    border: none;
+}
+
+.comment-textarea-request {
+    float: left;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    opacity: 0.8;
+    font-size: 15px;
+    -webkit-box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.33);
+    font-family: monospace;
 }
 
 .add-comment-icon {
     float: right;
     color: grey;
-    margin-top: 6%;
+    top: 42%;
     margin-right: 3%;
+}
+
+#header-delete {
+    padding: 10px;
+}
+
+.inquiry-overview-table .table-header {
+    width: 180px;
+}
+
+#header-delete {
+    width: 50px !important;
 }
 
 .delete-appointment-icon {
     color: grey;
     margin: auto;
-    margin-top: 6%;
+    margin-top: 10%;
 }
 
 .add-comment-icon:hover, .delete-appointment-icon:hover {
     opacity: 0.8;
     cursor: pointer;
 }
-
-
 
 /*Buttons über der Tabelle*/
 
@@ -91,11 +196,23 @@ caption {
     position: relative;
     display: inline-block;
     width: 100%;
-    margin: 30px auto;
+    margin: 40px auto;
+    padding-top: 20px;
 }
 
-.search-button {
-    width: 130px;
+/**/
+#button-container-student {
+    position: relative;
+    display: block;
+    width: 80%;
+    /*width: 72%;*/
+    margin: 30px auto;
+    padding-bottom: 40px;
+}
+
+/**/
+.search-button, .search-button-student {
+    width: 160px;
     float: left;
     box-sizing: border-box;
     border: 2px solid #ccc;
@@ -111,7 +228,12 @@ caption {
 }
 
 .search-button:focus {
-    width: 30%;
+    width: 40%;
+}
+
+/**/
+.search-button-student:focus {
+    width: 89%;
 }
 
 .active {
@@ -146,8 +268,9 @@ caption {
 }
 
 #refresh-icon {
-    margin-top: 15px;
-    margin-left: 15px;
+    margin-top: 13px;
+    margin-left: 25px;
+    font-size: 18px;
     color: grey;
 }
 
@@ -168,27 +291,45 @@ caption {
     margin-left: 50px;
 }
 
-#pdf-button, #plan-student-button, #plan-admin-button, #comment-admin-button {
-    width: 114px;
-    border: 2px solid #ccc;
+#plan-student-button, #plan-admin-button, #comment-admin-button, #current-week, #next-week, #both-weeks {
+    margin-left: 5px;
+    /*font-size: 16px;*/
+    font-family: 'Raleway';
     border-radius: 4px;
-    font-size: 16px;
-    background-color: white;
-    padding: 10px 10px 10px 10px;
 }
 
 #plan-student-button, #plan-admin-button, #comment-admin-button {
     width: 50px;
+    padding: 10px;
 }
 
-#refresh-icon:hover, #pdf-button:hover, #plan-student-button:hover, #plan-admin-button:hover, #comment-admin-button:hover {
+#current-week, #next-week, #both-weeks {
+    width: 50px; /*144px*/
+    padding: 8px;
+}
+
+#plan-student-button:focus, #plan-admin-button:focus, #comment-admin-button:focus {
+    outline: 0;
+}
+
+#pdf-button {
+    margin-top: 7px;
+    margin-right: 12px;
+    font-size: 30px;
+    color: grey;
+}
+
+#refresh-icon:hover, #pdf-button:hover, #plan-student-button:hover, #plan-admin-button:hover, #comment-admin-button:hover, #current-week:hover, #next-week:hover, #both-weeks:hover {
     cursor: pointer;
-    opacity: 0.9;
+    opacity: 0.8;
 }
-
-
-
 
 .hidden {
     visibility: hidden;
+}
+
+.view-button-active {
+    color: red;
+    font-size: 17px;
+    font-weight: bold;
 }

@@ -1,0 +1,30 @@
+.appointment-administration-header {
+    text-align: center;
+}
+
+.appointment-administration {
+    width: 200px;
+    margin: 40px auto;
+}
+
+#inputCode {
+    width: 200px;
+}
+
+#enter_code_button {
+    width: 200px;
+    margin-top: 5px;
+    padding: 10px;
+    font-size: 17px;
+    font-family: 'Raleway';
+    border-radius: 4px;
+}
+
+#enter_code_button:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+#enter_code_button:focus {
+    outline: 0;
+}

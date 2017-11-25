@@ -9,25 +9,92 @@ Scheduler.CreationAdmin = (function () {
 
     /*Externer Aufruf: CalendarAppointments.js*/
     function setupDateField(date) {
-        dateField.value = date;
-        //timeStartField.value = timeStart;
-        //timeEndField.value = timeEnd;
+        dateField.value = date.split("-")[2] + "." + date.split("-")[1] + "." + date.split("-")[0];
+    }
+    
+    function setupDate() {
+        var germanDate, date;
+        germanDate = dateField.value;
+        date = germanDate.split(".")[2] + "-" + germanDate.split(".")[1] + "-" + germanDate.split(".")[0];
+        return date;
+    }
+    
+    function checkTimeField() {
+        var saveModal, minutesAlertWrong, date;
+        saveModal = document.getElementById("saveModal");
+        minutesAlertWrong = document.getElementById("minutesWrong");
+        
+        if (timeStartField.value.substr(4,1) === "0" || timeStartField.value.substr(4,1) === "5") {
+            if (checkInputFields(dateField, timeStartField, timeEndField)) {
+                saveModal.style.display = "block";
+                date = setupDate();
+                Scheduler.DatabaseOfficeHours.setDataToDatabase(date, timeStartField.value, timeEndField.value);
+            }
+        } else {
+            minutesAlertWrong.classList.remove("hidden");
+            window.setTimeout(function() {
+                minutesAlertWrong.classList.add("hidden")
+            }, 5000);
+        }
+    }
+    
+    function checkDateField() {
+        var emptyDateAlert = document.getElementById("empty-date-field");
+        if (dateField.value === "") {
+            emptyDateAlert.classList.remove("hidden");
+            window.setTimeout(function() {
+                emptyDateAlert.classList.add("hidden")
+            }, 5000);
+        }
     }
     
     function initAddOfficeHourButton() {
-        var addOfficeHourButton = document.querySelector("#add-appointment-button_admin");
+        var addOfficeHourButton;
+        addOfficeHourButton = document.querySelector("#add-appointment-button_admin");
         addOfficeHourButton.addEventListener("click", function() {
-            if (checkInputFields(dateField, timeStartField, timeEndField)) {
-                Scheduler.DatabaseOfficeHours.setDataToDatabase(dateField.value, timeStartField.value, timeEndField.value);
-            }
+            checkDateField();
+            checkTimeField();
         });
     }
+    
+    //Setzt die Endzeit automatisch eine Stunde später als die Startzeit 
+    function initTimeFieldsChange(){
+        var startTime, endTime;
+        timeStartField.onchange = (function() {
+            startTime = timeStartField.value;
+            endTime = parseInt(startTime.substr(0,2)) + 1;
+            if (endTime < 10){
+                endTime = "0" + endTime;
+            }
+            timeEndField.value = endTime + startTime.substr(2,3);           
+        });
+    }
+    /*
+    startMinutes = startTime.substr(3,2);
+            console.log(startMinutes);
+            if(parseInt(startTime.substr(4,1)) < 5){
+                console.log("minuten sind kleiner 5");
+                startTime = startTime.substr(0,startTime.length-1) + "0";
+                console.log(startTime);
+            }
+            if(parseInt(startTime.substr(4,1)) > 5){
+                console.log("minuten größer 5");
+                startTime = startTime.substr(3, 2);
+                startTime = startTime + 
+            }
+            endTime = parseInt(startTime.substr(0,2)) + 1;
+            if (endTime < 10){
+                endTime = "0" + endTime;
+            }
+            
+            */
     
     //Neuen Sprechstundentermin hinzufügen
     function initOfficeHourCreation() {
         dateField = document.querySelector("#date");
         timeStartField = document.querySelector("#period-start");
         timeEndField = document.querySelector("#period-end");
+        initTimeFieldsChange();
         initAddOfficeHourButton();
     }
     

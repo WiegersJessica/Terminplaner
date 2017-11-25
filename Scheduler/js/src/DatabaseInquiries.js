@@ -20,6 +20,14 @@ Scheduler.DatabaseInquiries = (function () {
         ref.remove();
     }
     
+    function deleteAllInquiriesFromDatabase() {
+        var ref = firebase.database().ref("/" + INQUIRIES);
+        ref.remove();
+        //reload?
+    }
+    
+    
+    
     function updateDatabase(key, comment) {
         var ref = firebase.database().ref("/" + INQUIRIES + "/" + key);
         ref.update({
@@ -27,13 +35,14 @@ Scheduler.DatabaseInquiries = (function () {
         });
     }
     
-    //+Dringlichkeit
-    function setDataToDatabase(lastname, firstname, email) {
+    //+Dringlichkeit=comment
+    function setDataToDatabase(date, lastname, firstname, email, comment) {
         db.push().set({
+            "date": date,
             "lastname": lastname,
             "firstname": firstname,
             "email": email,
-            "comment": ""
+            "comment": comment
         }).then(function(snapshot) {
             //location.reload();
         });
@@ -47,5 +56,6 @@ Scheduler.DatabaseInquiries = (function () {
     that.setDataToDatabase = setDataToDatabase;
     that.updateDatabase = updateDatabase;
     that.deleteInquiryFromDatabase = deleteInquiryFromDatabase;
+    that.deleteAllInquiriesFromDatabase = deleteAllInquiriesFromDatabase;
     return that;
 }());

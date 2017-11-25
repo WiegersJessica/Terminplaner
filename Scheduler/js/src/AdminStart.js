@@ -73,11 +73,18 @@ Scheduler.AdminStart = (function () {
     
     function init() {
         console.log("user");
+        $(window).scrollTop(0);
         initContainers();
         initHeader();
         Scheduler.CreationAdmin.init(); //Ansicht Terminerstellung ist zu Beginn aktiv
         Scheduler.DatabaseTopics.init();
         Scheduler.DatabaseOfficeHours.init();
+        Scheduler.AppointmentOverview.setupTableButtons();
+        Scheduler.InquiryOverview.setupButtonDeleteAll();
+        Scheduler.InquiryOverview.setupModalNotification();
+        Scheduler.InquiryOverview.setupModalDelete();
+        Scheduler.AppointmentOverview.setupModalDelete();
+        Scheduler.CalendarAppointments.init();
     }
     
     that.init = init;

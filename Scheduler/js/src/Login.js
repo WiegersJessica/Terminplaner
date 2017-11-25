@@ -5,7 +5,7 @@ Scheduler.Login = (function () {
     var that = {},
         LOGIN = "#login",
         /*DATENBANK - VORAB LÖSUNG MIT ARRAY UND MAP*/
-        email = "test@mail.de",
+        email = "admin@mail.de",
         password = "Planer",
         login = false,
         signInButton,

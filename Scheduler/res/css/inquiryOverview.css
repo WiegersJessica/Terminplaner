@@ -1,5 +1,16 @@
+/*Modal wird eventuell rausgemacht*/
+.modal-inquiry {
+    width: 45%;
+    top: -20%;
+}
+
 .modal-message-box {
     margin-top: 20px;
+}
+
+#modal-recipients-label, #modal-message-label {
+    font-size: 16px;
+    font-family: 'Raleway';
 }
 
 #modal-recipients-list {
@@ -9,6 +20,7 @@
 .recipients-list-element {
     margin-top: 2px;
     margin-bottom: 2px;
+    font-size: 15px;
 }
 
 #modal-message-input {
@@ -17,10 +29,14 @@
     width: 100%;
     margin: 10px auto;
     padding: 5px;
+    font-size: 14px;
+    color: grey;
 }
 
 /**/
-
+#inquiry-search-button:focus {
+    width: 80%;
+}
 
 /* Removes the clear button from date inputs */
 input[type="date"]::-webkit-clear-button {
@@ -44,9 +60,9 @@ input[type="date"] {
     color: #95a5a6;
     font-family: "Helvetica", arial, sans-serif;
     font-size: 18px;
-    border:1px solid #ecf0f1;
-    background:#ecf0f1;
-    padding:5px;
+    
+    background: white;
+    padding: 5px;
     display: inline-block !important;
     visibility: visible !important;
 }

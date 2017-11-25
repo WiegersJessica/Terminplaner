@@ -6,15 +6,42 @@ Scheduler.InquiryOverview = (function () {
         login,
         tableBody,
         recipientsList,
-        commentGeneralColumn,
         commentTrackedColumn,
         idCounter = 0,
-        INQUIRIES = "Anfragen";
+        INQUIRIES = "Anfragen",
+        emails = [],
+        sendMailModal,
+        /*-*/
+        deleteInquiryModel,
+        column;
     
-    
-    function setupModal() {
-        var messageTextarea = document.querySelector("#modal-message-input");
-       // messageTextarea.innerHTML = "Ein neuer Sprechstundentermin steht zur Verfügung. Die zusätzliche Sprechstunde findet am ... statt. Sie können sich absofort für diesen Termin eintragen."
+    function setupButtonDeleteAll() {
+        var buttonDeleteAll = document.querySelector("#delete-all-button");
+        buttonDeleteAll.addEventListener("click", function() {
+            console.log("delete");
+            Scheduler.DatabaseInquiries.deleteAllInquiriesFromDatabase();
+        });
+    }
+
+    //Matthias:
+    //emails ist ein Array und darin stecken alle E-Mails, die eine Benachrichtigung erhalten sollen!
+    //Mit der forEach-Schleife geht man ja alle E-Mails durch, so kannst du dann jedem eine E-Mail senden oder?
+    //In messageText steckt der vorbereitete Text!!!
+    function setupModalNotification() {
+        var messageTextarea, messageText, buttonSendNotification;
+        sendMailModal = document.getElementById("messageModal");
+        messageTextarea = document.querySelector("#modal-message-input");
+        buttonSendNotification = document.querySelector("#modal-button-message-send");
+        
+        buttonSendNotification.addEventListener("click", function() {
+            messageText = messageTextarea.value; //NACHRICHT, die geschickt werden soll!!!
+            console.log(messageText);
+            emails.forEach(function(email) { //in email ist die EMAIL!!!
+                console.log(email);
+                //SENDMAIL(email, messageText) !!! --> SERVER
+            });
+            //reload;
+        });
     }
     
     function setupRecipientsListModal(childSnapshot) {
@@ -25,80 +52,29 @@ Scheduler.InquiryOverview = (function () {
         listElement.classList.add("recipients-list-element");
         listElement.innerHTML = appointment.email;
         recipientsList.appendChild(listElement);
+        emails.push(appointment.email);
     }
     
-    //Löschen: Klick auf das Löschen-Symbol
-    function iconDeleteAddEventListener(iconDelete) {
-        var column, row, key;
-        iconDelete.addEventListener("click", function(event) {
-            column = event.target.parentNode;
+    /*-*/
+    function setupModalDelete() {
+        var buttonDelete, row, key;
+        deleteInquiryModel = document.querySelector("#modal-delete-inquiry");
+        buttonDelete = document.querySelector("#modal-button-inquiry-delete");
+        
+        buttonDelete.addEventListener("click", function() {
             row = column.parentNode;
             row.parentNode.removeChild(row); /*Tabelle --> Reihe entfernen*/
             key = row.getAttribute("row-key"); /*Key --> Entsprechenden Termin aus der Datenbank löschen*/
-            key = row.getAttribute("row-key"); /*Key --> Entsprechenden Termin aus der Datenbank löschen*/
-            //UPDATE DATABASE
             Scheduler.DatabaseInquiries.deleteInquiryFromDatabase(key); /*Entsprechenden Termin aus der Datenbank löschen*/
         });
     }
     
-    //Kommentar: Klick auf einen verfassten Kommentar (Textarea und Icon erscheinen und Kommentar kann upgedatet werden)
-    function commentColumnAddEventListener(event) {
-        var id, icon, commentField;
-        commentField = setupTextarea();
-        commentField.value = event.target.textContent;
-        icon = setupIcon(commentField);
-
-        event.target.innerHTML = "";
-        event.target.appendChild(commentField);
-        event.target.appendChild(icon);
-        event.target.removeEventListener("click", commentColumnAddEventListener);
-    }
-    
-    //Kommentar: Klick auf das Icon (Häkchen)
-    function iconAddEventListener(icon, commentField) {
-        var commentColumn;
-        icon.addEventListener("click", function(event) {
-            commentColumn = event.target.parentNode; /*Aktuelle Spalte über Parent holen*/
-            commentColumn.innerHTML = commentField.value;
-            commentColumn.addEventListener("click", commentColumnAddEventListener, false); /*Verfasster Kommentar soll klickbar sein --> Ändern*/
-            commentField.style.display = "none";
-            icon.style.display = "none";
-            
-            //UPDATE DATABASE
-            Scheduler.DatabaseInquiries.updateDatabase(commentColumn.parentNode.getAttribute("row-key"), commentField.value, commentColumn.getAttribute("id"));
+    //Löschen: Klick auf das Löschen-Symbol
+    /*-*/
+    function iconDeleteAddEventListener(iconDelete) {
+        iconDelete.addEventListener("click", function(event) {
+            column = event.target.parentNode;
         });
-    }
-    
-    //Kommentar (bereits verfasst)
-    function setupComment(commentColumn, comment) {
-        commentColumn.innerHTML = comment;
-        commentColumn.addEventListener("click", commentColumnAddEventListener, false); /*Verfasster Kommentar soll klickbar sein --> Ändern*/
-    }
-    
-    //Kommentar: Icon (Häkchen)
-    function setupIcon(commentField) {
-        var icon = document.createElement("span");
-        icon.className = "glyphicon glyphicon-ok";
-        icon.classList.add("add-comment-icon"); /*Notwendig für's Styling*/
-        iconAddEventListener(icon, commentField); /*Kommentar wird hinzugefügt*/
-        return icon;
-    }
-    
-    //Kommentar: Textarea
-    function setupTextarea() {
-        var commentField = document.createElement("textarea");
-        commentField.placeholder = "Kommentar";
-        commentField.classList.add("comment-textarea"); /*Notwendig für's Styling*/
-        return commentField;
-    }
-    
-    //Kommentar
-    function setupAddComment(commentColumn) {
-        var commentField, icon;
-        commentField = setupTextarea();
-        icon = setupIcon(commentField);
-        commentColumn.appendChild(commentField);
-        commentColumn.appendChild(icon);
     }
     
     //Löschen
@@ -110,26 +86,23 @@ Scheduler.InquiryOverview = (function () {
         iconDelete = document.createElement("span");
         iconDelete.className = "glyphicon glyphicon-trash";
         iconDelete.classList.add("delete-appointment-icon"); /*Notwendig für's Styling*/
-        iconDeleteAddEventListener(iconDelete);
         
+        iconDelete.setAttribute("data-toggle", "modal");
+        iconDelete.setAttribute("data-target", "#modal-delete-person");
+        
+        iconDeleteAddEventListener(iconDelete);
         deleteColumn.appendChild(iconDelete);
         return deleteColumn;
     }
     
     //Kommentar (allgemein)
-    function setupCommentGeneralColumn(appointment) {
-        commentGeneralColumn = document.createElement("td");
-        commentGeneralColumn.classList.add("appointment-table-body");
-        commentGeneralColumn.classList.add("comment-column"); /*Zusätzlich notwendig für's Styling*/
-        commentGeneralColumn.setAttribute("id", "general");
-        
-        if (appointment.comment === "") { //Noch kein Kommentar verfasst
-            setupAddComment(commentGeneralColumn); 
-        } else {
-            setupComment(commentGeneralColumn, appointment.comment);
-        }
-        
-        return commentGeneralColumn;
+    function setupCommentColumn(appointment) {
+        var commentColumn = document.createElement("td");
+        commentColumn.classList.add("appointment-table-body");
+        //commentColumn.classList.add("comment-column"); /*Zusätzlich notwendig für's Styling*/
+        commentColumn.setAttribute("id", "general");
+        commentColumn.innerHTML = appointment.comment;
+        return commentColumn;
     }
     
     //E-Mail
@@ -156,10 +129,17 @@ Scheduler.InquiryOverview = (function () {
         return lastnameColumn;
     }
     
+    function setupDateColumn(appointment){
+        var dateColumn = document.createElement("td");
+        dateColumn.classList.add("appointment-table-body");
+        dateColumn.innerHTML = appointment.date;
+        return dateColumn;
+    }
+    
     /*Update*/
     function setupTableRow(childSnapshot) {
         var key, appointment, tableRow,
-            lastnameColumn, firstnameColumn, emailColumn, commentGeneralColumn, deleteColumn;
+            dateColumn, lastnameColumn, firstnameColumn, emailColumn, commentColumn, deleteColumn;
 
         key = childSnapshot.key();
         appointment = childSnapshot.val();
@@ -169,16 +149,19 @@ Scheduler.InquiryOverview = (function () {
         tableRow.setAttribute("row-id", idCounter); //0, 1, 2, 3, 4, ...
         tableRow.setAttribute("row-key", key); //Schlüssel in Firebase-Datenbank
         
+        //Hier noch das Datum rein machen!
+        dateColumn = setupDateColumn(appointment);
         lastnameColumn = setupLastnameColumn(appointment);
         firstnameColumn = setupFirstnameColumn(appointment);
         emailColumn = setupEmailColumn(appointment);
-        commentGeneralColumn = setupCommentGeneralColumn(appointment);
+        commentColumn = setupCommentColumn(appointment);
         deleteColumn = setupDeleteColumn();
             
+        tableRow.appendChild(dateColumn);
         tableRow.appendChild(lastnameColumn);
         tableRow.appendChild(firstnameColumn);
         tableRow.appendChild(emailColumn);
-        tableRow.appendChild(commentGeneralColumn);
+        tableRow.appendChild(commentColumn);
         tableRow.appendChild(deleteColumn);
         
         idCounter++;
@@ -208,6 +191,7 @@ Scheduler.InquiryOverview = (function () {
         while(recipientsList.firstChild) {
             recipientsList.removeChild(recipientsList.firstChild);
         }
+        emails = [];
     }
     
     //Tabelle leeren
@@ -219,13 +203,19 @@ Scheduler.InquiryOverview = (function () {
         }
     }
     
+    /**/
     function init() {
         clearTable();
         clearRecipientsList();
         getDataFromDatabase();
-        setupModal();
     }
     
     that.init = init;
+    that.setupButtonDeleteAll = setupButtonDeleteAll;
+    /*-*/
+    that.setupModalNotification = setupModalNotification;
+    /*-*/
+    that.setupModalDelete = setupModalDelete;
+    
     return that;
 }());

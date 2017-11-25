@@ -1,20 +1,49 @@
-h2 { 
-    font: 30px Arial, Helvetica, sans-serif !important; /**/
-    margin: 10px !important;
+.nav {
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Raleway';
 }
 
-#login_button{
+h2 { 
+    margin: 10px !important;
+    font-size: 40px;
+    font-family: 'Grand Hotel';
+    color: grey;
+}
+
+/**/
+h3 {
+    text-align: center;
+    font-family: 'Raleway';
+    color: grey;
+}
+
+h4 {
+    font-family: 'Raleway';
+    color: white;
+}
+
+/**/
+h5 {
+    text-align: center;
+    font-family: 'Raleway';
+    color: white;
+}
+
+.title {
+    margin-top: 20px !important;
+    margin-left: 20px !important;
+    font-size: 44px;
+}
+
+#login_button {
     margin-right: 5px;
     margin-top: 15px;
     color: grey;
 }
 
-#enter_code_button{
-    margin-top: 5px;
-}
-
 #calendar td:hover {
-    cursor:pointer;
+    cursor: pointer;
 }
 
 input {
@@ -27,6 +56,7 @@ input[type=date]::-webkit-inner-spin-button {
     display: none;
 }
 
-/*.fc-button-group {
-    margin-top: 15px;
-}*/
+/*Brauche ich eigentlich nicht*/
+.hidden {
+    visibility: hidden;
+}
