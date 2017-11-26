@@ -1,8 +1,11 @@
 (function(){
     var express = require("express");
     var path = require('path')
-    var mailer = require(__dirname + '/server-side-js/mailer')
     var bodyParser = require('body-parser');
+    var session = require('express-session');
+    var mailer = require(__dirname + '/server-side-js/mailer')
+    var auth = require( __dirname + '/server-side-js/auth.js');
+
     var server = express();
     var website = 'Scheduler/'
 
@@ -13,9 +16,21 @@
         next();
     });
 
+    server.use(session({ 
+        secret: 'some-secret',
+        saveUninitialized: false,
+        resave: true
+    }));
+
+    server.use(auth.initialize());
+    server.use(auth.session());
+
     // This includes css, js etc. to be served from the directory website
-    server.use(express.static(website));
+    server.use(express.static(website))
+
+    // Types of data that can be parsed
     server.use(bodyParser.json());
+    server.use(bodyParser.urlencoded({extended: false}));
 
 
     /* start routes */
@@ -27,8 +42,26 @@
         res.sendFile( website +'index.html', {root: __dirname})
     });
     server.get("/admin/", function(req, res) {
-        res.sendFile( website +'admin.html', {root: __dirname})
+        if (req.user){
+            res.sendFile( website +'admin.html', {root: __dirname})
+        }
+        else{
+            res.redirect('/login/')
+        }
     });
+    server.get("/login/", function(req, res){
+        res.sendFile( website + 'login.html', {root: __dirname})
+    })
+    server.post('/login/', auth.authenticate('login', {
+            successRedirect: '/admin/',
+            failureRedirect: '/login/'
+        })
+    )
+    server.get('/logout', function(req, res) {
+        req.logout();
+        res.redirect('/');
+    });
+
     server.post('/send_notification', function(req, res){
         mailer.sendNotification(req.body.email, req.body.key)
         res.sendStatus(200)

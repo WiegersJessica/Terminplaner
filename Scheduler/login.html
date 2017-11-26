@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> <!--Optimieren für mobile Geräte-->
+        <title>Scheduler</title>
+        
+        <!--jQuery-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        
+        
+        <!--Bootstrap-->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.7.0/jquery.matchHeight-min.js"></script>
+        
+        <!--CSS-Dateien-->
+        <link rel="stylesheet" href="res/css/scheduler.css">
+        <link rel="stylesheet" href="res/css/fullcalendar.min.css">
+        <link rel="stylesheet" href="res/css/appointmentCreation.css">
+        <link rel="stylesheet" href="res/css/appointmentOverview.css">
+        <link rel="stylesheet" href="res/css/appointmentAdministration.css">
+        <link rel="stylesheet" href="res/css/inquiryOverview.css">
+        <link rel="stylesheet" href="res/css/scrolling.css">
+        <link rel="stylesheet" href="res/css/main.css">
+        <link rel="stylesheet" href="res/css/calendarAppointments.css">
+        <link rel="stylesheet" href="res/css/login.css">
+        <link rel="stylesheet" href="res/css/admin.css">
+        <link rel="stylesheet" href="res/css/calendar.css">
+        
+        <!--Schriftarten-->
+        <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Bitter' type='text/css'>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Grand+Hotel" type='text/css'>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:100,300" type='text/css'>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Space+Mono" type='text/css'>   
+        
+    </head>
+    
+    <body>
+        
+        <!--Login-->
+        <div id="login_window" class="col-md-4 container" style="float:initial">
+            <h2 class="form-signin-heading">Login</h2>
+            <form class="form-signin" action="/login/" method="POST">
+                <label for="inputEmail" class="sr-only">E-Mail Adresse</label>
+                <input name="username" type="text" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                <label for="inputPassword" class="sr-only">Passwort</label>
+                <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                <button id="sign_in_button" type="submit">Anmelden</button>
+                <div id="password-wrong" class="alert alert-danger hidden" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Fehler:</span>
+                    &nbsp;&nbsp;Falscher Benutzername oder falsches Passwort!
+                </div>
+            </form>
+        </div>
+        
+        <!--<script src="js/libs/jquery.min.js"></script>-->
+        <script src="js/libs/moment.min.js"></script>
+        <script src="js/libs/fullcalendar.min.js"></script>
+        <script src='js/locale/de.js'></script>
+        <script src="js/src/bootstrap.js"></script>
+    
+    </body>
+
+</html>
