@@ -31,9 +31,8 @@ Scheduler.DatabaseAppointments = (function () {
             $.ajax({
                 url: 'send_info',
                 type: "POST",
-                data: JSON.stringify(data),
+                data: JSON.stringify({email:email, text:messageText}),
                 contentType: "application/json",
-                complete: reload_site
             });
             //SENDMAIL(email, messageText) !!! --> SERVER
         });
@@ -127,12 +126,10 @@ Scheduler.DatabaseAppointments = (function () {
     }
 
     function reload_site(){
-        console.log('ajax return success')
-        //location.reload()
+        location.reload()
     }
 
     function sendNotificationMail(email, key){
-        console.log('before ajax')
         var data = { email: email, key: key}
         $.ajax({
                 url: 'send_notification',

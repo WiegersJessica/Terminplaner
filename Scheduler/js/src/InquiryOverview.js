@@ -40,9 +40,8 @@ Scheduler.InquiryOverview = (function () {
                 $.ajax({
                     url: 'send_info',
                     type: "POST",
-                    data: JSON.stringify(data),
+                    data: JSON.stringify({email:email, text:messageText}),
                     contentType: "application/json",
-                    complete: reload_site
                 });
                 //SENDMAIL(email, messageText) !!! --> SERVER
             });
