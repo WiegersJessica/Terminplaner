@@ -8,6 +8,7 @@
 
     var server = express();
     var website = 'Scheduler/';
+    var html_root = website + 'html/';
     var static_root = website + 'staticfiles/';
 
     server.use(function (req, res, next) {
@@ -40,11 +41,11 @@
         http://expressjs.com/de/guide/routing.html
     */
     server.get("/", function(req, res) {
-        res.sendFile( website +'index.html', {root: __dirname})
+        res.sendFile( html_root +'index.html', {root: __dirname})
     });
     server.get("/admin/", function(req, res) {
         if (req.user){
-            res.sendFile( website +'admin.html', {root: __dirname});
+            res.sendFile( html_root +'admin.html', {root: __dirname});
         }
         else{
             res.redirect('/login/');
@@ -52,7 +53,7 @@
     });
     server.get("/login/", function(req, res){
         if (!req.user){
-            res.sendFile( website + 'login.html', {root: __dirname});
+            res.sendFile( html_root + 'login.html', {root: __dirname});
         }
         else{
             res.redirect('/admin/');
