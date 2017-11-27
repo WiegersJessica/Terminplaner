@@ -1,13 +1,14 @@
 (function(){
     var express = require("express");
-    var path = require('path')
+    var path = require('path');
     var bodyParser = require('body-parser');
     var session = require('express-session');
-    var mailer = require(__dirname + '/server-side-js/mailer')
+    var mailer = require(__dirname + '/server-side-js/mailer');
     var auth = require( __dirname + '/server-side-js/auth.js');
 
     var server = express();
-    var website = 'Scheduler/'
+    var website = 'Scheduler/';
+    var static_root = website + 'staticfiles/';
 
     server.use(function (req, res, next) {
         res.header("Access-Control-Allow-Origin", "*");
@@ -26,7 +27,7 @@
     server.use(auth.session());
 
     // This includes css, js etc. to be served from the directory website
-    server.use(express.static(website))
+    server.use('/static', express.static(static_root))
 
     // Types of data that can be parsed
     server.use(bodyParser.json());
