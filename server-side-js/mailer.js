@@ -8,6 +8,7 @@
 	function sendNotification(to, key){
 		subject = 'Beantragen eines Termins'
 		text = 'Ihr Termin wurde beantragt.\nUm weitere Änderungen vorzunehmen benötigen sie folgenden Key: ' + key
+		text = "Lieber Studierender,\n\nIhr Termin wurde eingetragen.\nSollten sie ihn nicht wahrnehmen können, kann der Termin unter dem Reiter 'Terminverwaltung' mit folgendem Code gelöscht werden: " + key + "\n\nMit freundlichen Grüßen,\nProf. Dr. Wolff";
 		sendMail(to, subject, text)
 	}
 
